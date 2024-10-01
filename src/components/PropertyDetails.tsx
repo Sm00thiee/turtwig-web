@@ -9,11 +9,20 @@ interface PropertyDetailsProps {
   postedTime: string;
   onLike: () => void;
   onDislike: () => void;
+  isAnimating: boolean;
 }
 
-const PropertyDetails: React.FC<PropertyDetailsProps> = ({ imageUrl, price, address, postedTime, onLike, onDislike }) => {
+const PropertyDetails: React.FC<PropertyDetailsProps> = ({ 
+  imageUrl, 
+  price, 
+  address, 
+  postedTime, 
+  onLike, 
+  onDislike,
+  isAnimating
+}) => {
   return (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+    <div className={`bg-white rounded-lg shadow-lg overflow-hidden transition-opacity duration-300 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
       <img src={imageUrl} alt="Property" className="w-full h-64 object-cover" />
       <div className="p-6">
         <h2 className="text-2xl font-bold mb-2">{price}</h2>

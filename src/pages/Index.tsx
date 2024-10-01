@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import UserProfile from '@/components/UserProfile';
 import PropertyListing from '@/components/PropertyListing';
 import PropertyDetails from '@/components/PropertyDetails';
@@ -30,6 +30,7 @@ const properties = [
 
 const Index = () => {
   const [currentPropertyIndex, setCurrentPropertyIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const handleLike = () => {
     toast({
@@ -48,7 +49,11 @@ const Index = () => {
   };
 
   const moveToNextProperty = () => {
-    setCurrentPropertyIndex((prevIndex) => (prevIndex + 1) % properties.length);
+    setIsAnimating(true);
+    setTimeout(() => {
+      setCurrentPropertyIndex((prevIndex) => (prevIndex + 1) % properties.length);
+      setIsAnimating(false);
+    }, 300); // Match this with the CSS transition duration
   };
 
   const currentProperty = properties[currentPropertyIndex];
@@ -78,6 +83,7 @@ const Index = () => {
           postedTime={currentProperty.postedTime}
           onLike={handleLike}
           onDislike={handleDislike}
+          isAnimating={isAnimating}
         />
       </div>
     </div>
