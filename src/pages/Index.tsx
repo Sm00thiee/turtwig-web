@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import UserProfile from '@/components/UserProfile';
 import PropertyListing from '@/components/PropertyListing';
 import PropertyDetails from '@/components/PropertyDetails';
@@ -9,21 +9,33 @@ const properties = [
     id: 1,
     price: "9.0 million/month",
     address: "18 Ngoc Tu Gate, Van Mieu, Dong Da, Ha Noi",
-    imageUrl: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+    ],
     postedTime: "8 hours ago"
   },
   {
     id: 2,
     price: "10.0 million/month",
     address: "48 Xuan Dieu, Tay Ho, Dong Da, Ha Noi",
-    imageUrl: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+    ],
     postedTime: "12 hours ago"
   },
   {
     id: 3,
     price: "9.0 million/month",
     address: "22 Lieu Giai, Ba Dinh, Ha Noi",
-    imageUrl: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+    ],
     postedTime: "1 day ago"
   }
 ];
@@ -53,14 +65,13 @@ const Index = () => {
     setTimeout(() => {
       setCurrentPropertyIndex((prevIndex) => (prevIndex + 1) % properties.length);
       setIsAnimating(false);
-    }, 300); // Match this with the CSS transition duration
+    }, 300);
   };
 
   const currentProperty = properties[currentPropertyIndex];
 
   return (
     <div className="min-h-screen bg-gray-100 flex">
-      {/* Left Sidebar */}
       <div className="w-1/4 p-4 bg-white border-r">
         <UserProfile name="John Doe" status="Active renter" />
         <h2 className="mt-8 mb-4 text-xl font-semibold">Units Listing</h2>
@@ -73,11 +84,9 @@ const Index = () => {
           />
         ))}
       </div>
-
-      {/* Main Content */}
       <div className="flex-1 p-8">
         <PropertyDetails 
-          imageUrl={currentProperty.imageUrl}
+          images={currentProperty.images}
           price={currentProperty.price}
           address={currentProperty.address}
           postedTime={currentProperty.postedTime}

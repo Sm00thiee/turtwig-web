@@ -1,9 +1,9 @@
-import React from 'react';
-import { Clock, MapPin, ThumbsUp, X } from 'lucide-react';
+import React, { useState } from 'react';
+import { Clock, MapPin, ThumbsUp, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface PropertyDetailsProps {
-  imageUrl: string;
+  images: string[];
   price: string;
   address: string;
   postedTime: string;
@@ -13,7 +13,7 @@ interface PropertyDetailsProps {
 }
 
 const PropertyDetails: React.FC<PropertyDetailsProps> = ({ 
-  imageUrl, 
+  images, 
   price, 
   address, 
   postedTime, 
@@ -21,9 +21,37 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({
   onDislike,
   isAnimating
 }) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const nextImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
+  };
+
   return (
     <div className={`bg-white rounded-lg shadow-lg overflow-hidden transition-opacity duration-300 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
-      <img src={imageUrl} alt="Property" className="w-full h-64 object-cover" />
+      <div className="relative">
+        <img src={images[currentImageIndex]} alt="Property" className="w-full h-64 object-cover" />
+        <Button variant="outline" className="absolute top-1/2 left-2 transform -translate-y-1/2" onClick={prevImage}>
+          <ChevronLeft className="w-4 h-4" />
+        </Button>
+        <Button variant="outline" className="absolute top-1/2 right-2 transform -translate-y-1/2" onClick={nextImage}>
+          <ChevronRight className="w-4 h-4" />
+        </Button>
+        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2">
+          {images.map((_, index) => (
+            <span
+              key={index}
+              className={`inline-block w-2 h-2 rounded-full mx-1 ${
+                index === currentImageIndex ? 'bg-white' : 'bg-gray-300'
+              }`}
+            />
+          ))}
+        </div>
+      </div>
       <div className="p-6">
         <h2 className="text-2xl font-bold mb-2">{price}</h2>
         <div className="flex items-center text-gray-600 mb-4">
