@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clock, MapPin, ThumbsUp } from 'lucide-react';
+import { Clock, MapPin, ThumbsUp, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface PropertyDetailsProps {
@@ -7,9 +7,11 @@ interface PropertyDetailsProps {
   price: string;
   address: string;
   postedTime: string;
+  onLike: () => void;
+  onDislike: () => void;
 }
 
-const PropertyDetails: React.FC<PropertyDetailsProps> = ({ imageUrl, price, address, postedTime }) => {
+const PropertyDetails: React.FC<PropertyDetailsProps> = ({ imageUrl, price, address, postedTime, onLike, onDislike }) => {
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden">
       <img src={imageUrl} alt="Property" className="w-full h-64 object-cover" />
@@ -24,11 +26,14 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({ imageUrl, price, addr
           <span>{postedTime}</span>
         </div>
         <div className="flex justify-between">
-          <Button variant="outline" className="flex-1 mr-2">
+          <Button variant="outline" className="flex-1 mr-2" onClick={onLike}>
             <ThumbsUp className="w-4 h-4 mr-2" />
-            I like this
+            Like (Swipe Left)
           </Button>
-          <Button className="flex-1 ml-2">See details</Button>
+          <Button variant="outline" className="flex-1 ml-2" onClick={onDislike}>
+            <X className="w-4 h-4 mr-2" />
+            Dislike (Swipe Right)
+          </Button>
         </div>
       </div>
     </div>
