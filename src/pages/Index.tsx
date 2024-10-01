@@ -3,6 +3,8 @@ import UserProfile from '@/components/UserProfile';
 import PropertyListing from '@/components/PropertyListing';
 import PropertyDetails from '@/components/PropertyDetails';
 import { toast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
+import { ThumbsUp, X } from 'lucide-react';
 
 const properties = [
   {
@@ -84,16 +86,24 @@ const Index = () => {
           />
         ))}
       </div>
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-8 flex flex-col">
         <PropertyDetails 
           images={currentProperty.images}
           price={currentProperty.price}
           address={currentProperty.address}
           postedTime={currentProperty.postedTime}
-          onLike={handleLike}
-          onDislike={handleDislike}
           isAnimating={isAnimating}
         />
+        <div className="flex justify-center mt-4">
+          <Button variant="outline" className="mr-4" onClick={handleLike}>
+            <ThumbsUp className="w-4 h-4 mr-2" />
+            Like
+          </Button>
+          <Button variant="outline" onClick={handleDislike}>
+            <X className="w-4 h-4 mr-2" />
+            Dislike
+          </Button>
+        </div>
       </div>
     </div>
   );
