@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Clock, MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Clock, MapPin, ChevronLeft, ChevronRight, Home, Bath, BedDouble } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface PropertyDetailsProps {
@@ -8,6 +8,9 @@ interface PropertyDetailsProps {
   address: string;
   postedTime: string;
   isAnimating: boolean;
+  squareMeters: number;
+  bedrooms: number;
+  bathrooms: number;
 }
 
 const PropertyDetails: React.FC<PropertyDetailsProps> = ({ 
@@ -15,9 +18,13 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({
   price, 
   address, 
   postedTime,
-  isAnimating
+  isAnimating,
+  squareMeters,
+  bedrooms,
+  bathrooms
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showDetails, setShowDetails] = useState(false);
 
   const nextImage = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -28,7 +35,7 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({
   };
 
   return (
-    <div className={`bg-white rounded-lg shadow-lg overflow-hidden transition-opacity duration-300 h-[600px] ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
+    <div className={`bg-white rounded-lg shadow-lg overflow-hidden transition-opacity duration-300 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
       <div className="relative h-96">
         {images.length > 0 ? (
           <img src={images[currentImageIndex]} alt="Property" className="w-full h-full object-cover" />
@@ -58,14 +65,41 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({
       </div>
       <div className="p-6">
         <h2 className="text-2xl font-bold mb-2">{price}</h2>
-        <div className="flex items-center text-gray-600 mb-4">
+        <div className="flex items-center text-gray-600 mb-2">
           <MapPin className="w-4 h-4 mr-2" />
           <span>{address}</span>
         </div>
-        <div className="flex items-center text-gray-600 mb-6">
+        <div className="flex items-center text-gray-600 mb-4">
           <Clock className="w-4 h-4 mr-2" />
           <span>{postedTime}</span>
         </div>
+        <div className="flex justify-between items-center text-sm text-gray-600 mb-4">
+          <div className="flex items-center">
+            <Home className="w-4 h-4 mr-1" />
+            <span>{squareMeters} m²</span>
+          </div>
+          <div className="flex items-center">
+            <BedDouble className="w-4 h-4 mr-1" />
+            <span>{bedrooms}</span>
+          </div>
+          <div className="flex items-center">
+            <Bath className="w-4 h-4 mr-1" />
+            <span>{bathrooms}</span>
+          </div>
+        </div>
+        <Button 
+          variant="outline" 
+          className="w-full text-gray-600 hover:bg-gray-100"
+          onClick={() => setShowDetails(!showDetails)}
+        >
+          {showDetails ? 'Hide details' : 'See details'}
+        </Button>
+        {showDetails && (
+          <div className="mt-4 text-sm text-gray-600">
+            <p>Additional property details go here...</p>
+            {/* Add more detailed information about the property */}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -16,7 +16,10 @@ const properties = [
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
     ],
-    postedTime: "8 hours ago"
+    postedTime: "8 hours ago",
+    squareMeters: 60,
+    bedrooms: 2,
+    bathrooms: 2
   },
   {
     id: 2,
@@ -27,7 +30,10 @@ const properties = [
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
     ],
-    postedTime: "12 hours ago"
+    postedTime: "12 hours ago",
+    squareMeters: 75,
+    bedrooms: 3,
+    bathrooms: 2
   },
   {
     id: 3,
@@ -38,7 +44,10 @@ const properties = [
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
     ],
-    postedTime: "1 day ago"
+    postedTime: "1 day ago",
+    squareMeters: 55,
+    bedrooms: 2,
+    bathrooms: 1
   }
 ];
 
@@ -93,6 +102,9 @@ const Index = () => {
           address={currentProperty.address}
           postedTime={currentProperty.postedTime}
           isAnimating={isAnimating}
+          squareMeters={currentProperty.squareMeters}
+          bedrooms={currentProperty.bedrooms}
+          bathrooms={currentProperty.bathrooms}
         />
         <div className="flex justify-between mt-4">
           <Button variant="destructive" className="w-1/3" onClick={handleDislike}>
