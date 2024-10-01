@@ -32,12 +32,12 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({
   };
 
   return (
-    <div className={`bg-white rounded-lg shadow-lg overflow-hidden transition-opacity duration-300 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
-      <div className="relative">
+    <div className={`bg-white rounded-lg shadow-lg overflow-hidden transition-opacity duration-300 h-[600px] ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
+      <div className="relative h-96">
         {images.length > 0 ? (
-          <img src={images[currentImageIndex]} alt="Property" className="w-full h-64 object-cover" />
+          <img src={images[currentImageIndex]} alt="Property" className="w-full h-full object-cover" />
         ) : (
-          <div className="w-full h-64 bg-gray-200 flex items-center justify-center">No image available</div>
+          <div className="w-full h-full bg-gray-200 flex items-center justify-center">No image available</div>
         )}
         {images.length > 1 && (
           <>
