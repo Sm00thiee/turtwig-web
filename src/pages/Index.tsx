@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import UserProfile from '@/components/UserProfile';
 import PropertyListing from '@/components/PropertyListing';
 import PropertyDetails from '@/components/PropertyDetails';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '@/hooks/use-toast';
 
 const properties = [
   {
