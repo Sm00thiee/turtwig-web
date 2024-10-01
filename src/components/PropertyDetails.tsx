@@ -3,7 +3,7 @@ import { Clock, MapPin, ThumbsUp, X, ChevronLeft, ChevronRight } from 'lucide-re
 import { Button } from '@/components/ui/button';
 
 interface PropertyDetailsProps {
-  images: string[];
+  images?: string[];
   price: string;
   address: string;
   postedTime: string;
@@ -13,7 +13,7 @@ interface PropertyDetailsProps {
 }
 
 const PropertyDetails: React.FC<PropertyDetailsProps> = ({ 
-  images, 
+  images = [], 
   price, 
   address, 
   postedTime, 
@@ -34,13 +34,21 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({
   return (
     <div className={`bg-white rounded-lg shadow-lg overflow-hidden transition-opacity duration-300 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
       <div className="relative">
-        <img src={images[currentImageIndex]} alt="Property" className="w-full h-64 object-cover" />
-        <Button variant="outline" className="absolute top-1/2 left-2 transform -translate-y-1/2" onClick={prevImage}>
-          <ChevronLeft className="w-4 h-4" />
-        </Button>
-        <Button variant="outline" className="absolute top-1/2 right-2 transform -translate-y-1/2" onClick={nextImage}>
-          <ChevronRight className="w-4 h-4" />
-        </Button>
+        {images.length > 0 ? (
+          <img src={images[currentImageIndex]} alt="Property" className="w-full h-64 object-cover" />
+        ) : (
+          <div className="w-full h-64 bg-gray-200 flex items-center justify-center">No image available</div>
+        )}
+        {images.length > 1 && (
+          <>
+            <Button variant="outline" className="absolute top-1/2 left-2 transform -translate-y-1/2" onClick={prevImage}>
+              <ChevronLeft className="w-4 h-4" />
+            </Button>
+            <Button variant="outline" className="absolute top-1/2 right-2 transform -translate-y-1/2" onClick={nextImage}>
+              <ChevronRight className="w-4 h-4" />
+            </Button>
+          </>
+        )}
         <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2">
           {images.map((_, index) => (
             <span
