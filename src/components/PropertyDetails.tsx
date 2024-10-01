@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Clock, MapPin, ChevronLeft, ChevronRight, Home, Bath, BedDouble } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import FullSizeImageModal from './FullSizeImageModal';
 
 interface PropertyDetailsProps {
   images?: string[];
@@ -25,6 +26,7 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showDetails, setShowDetails] = useState(false);
+  const [showFullSizeImage, setShowFullSizeImage] = useState(false);
 
   const nextImage = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -34,11 +36,20 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({
     setCurrentImageIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
   };
 
+  const handleImageClick = () => {
+    setShowFullSizeImage(true);
+  };
+
   return (
     <div className={`bg-white rounded-lg shadow-lg overflow-hidden transition-opacity duration-300 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
       <div className="relative h-96">
         {images.length > 0 ? (
-          <img src={images[currentImageIndex]} alt="Property" className="w-full h-full object-cover" />
+          <img 
+            src={images[currentImageIndex]} 
+            alt="Property" 
+            className="w-full h-full object-cover cursor-pointer" 
+            onClick={handleImageClick}
+          />
         ) : (
           <div className="w-full h-full bg-gray-200 flex items-center justify-center">No image available</div>
         )}
@@ -101,6 +112,12 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({
           </div>
         )}
       </div>
+      {showFullSizeImage && (
+        <FullSizeImageModal
+          imageUrl={images[currentImageIndex]}
+          onClose={() => setShowFullSizeImage(false)}
+        />
+      )}
     </div>
   );
 };
