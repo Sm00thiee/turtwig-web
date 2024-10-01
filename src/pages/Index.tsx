@@ -94,14 +94,14 @@ const Index = () => {
           postedTime={currentProperty.postedTime}
           isAnimating={isAnimating}
         />
-        <div className="flex justify-center mt-4">
-          <Button variant="outline" className="mr-4" onClick={handleLike}>
-            <ThumbsUp className="w-4 h-4 mr-2" />
-            Like
-          </Button>
-          <Button variant="outline" onClick={handleDislike}>
+        <div className="flex justify-between mt-4">
+          <Button variant="destructive" className="w-1/3" onClick={handleDislike}>
             <X className="w-4 h-4 mr-2" />
             Dislike
+          </Button>
+          <Button variant="default" className="w-1/2 bg-green-500 hover:bg-green-600" onClick={handleLike}>
+            <ThumbsUp className="w-4 h-4 mr-2" />
+            Like
           </Button>
         </div>
       </div>
