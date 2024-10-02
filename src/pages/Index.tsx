@@ -7,7 +7,18 @@ import { toast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { ThumbsUp, X } from 'lucide-react';
 
-const properties = [
+interface Property {
+  id: number;
+  price: string;
+  address: string;
+  images: string[];
+  postedTime: string;
+  squareMeters: number;
+  bedrooms: number;
+  bathrooms: number;
+}
+
+const properties: Property[] = [
   {
     id: 1,
     price: "9.0 million/month",
@@ -55,8 +66,8 @@ const properties = [
 const Index = () => {
   const [currentPropertyIndex, setCurrentPropertyIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [likedProperties, setLikedProperties] = useState([]);
-  const [selectedProperty, setSelectedProperty] = useState(null);
+  const [likedProperties, setLikedProperties] = useState<Property[]>([]);
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
 
   const handleLike = () => {
     const currentProperty = properties[currentPropertyIndex];
@@ -86,7 +97,7 @@ const Index = () => {
     }, 300);
   };
 
-  const handlePropertyClick = (property) => {
+  const handlePropertyClick = (property: Property) => {
     setSelectedProperty(property);
   };
 
