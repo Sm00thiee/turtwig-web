@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import FullSizeImageModal from './FullSizeImageModal';
 
 interface PropertyDetailsProps {
-  images?: string[];
+  images: string[];
   price: string;
   address: string;
   postedTime: string;
@@ -15,7 +15,7 @@ interface PropertyDetailsProps {
 }
 
 const PropertyDetails: React.FC<PropertyDetailsProps> = ({ 
-  images = [], 
+  images, 
   price, 
   address, 
   postedTime,
