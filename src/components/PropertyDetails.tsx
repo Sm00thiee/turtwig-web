@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Clock, MapPin, ChevronLeft, ChevronRight, Home, Bath, BedDouble } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import FullSizeImageModal from './FullSizeImageModal';
+import GoogleMap from './GoogleMap';
 
 interface PropertyDetailsProps {
   images: string[];
@@ -28,32 +29,37 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({
   const [showDetails, setShowDetails] = useState(false);
   const [showFullSizeImage, setShowFullSizeImage] = useState(false);
 
+  const allImages = [...images, 'map'];
+  const totalImages = allImages.length;
+
   const nextImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % totalImages);
   };
 
   const prevImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
+    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + totalImages) % totalImages);
   };
 
   const handleImageClick = () => {
-    setShowFullSizeImage(true);
+    if (currentImageIndex < images.length) {
+      setShowFullSizeImage(true);
+    }
   };
 
   return (
     <div className={`bg-white rounded-lg shadow-lg overflow-hidden transition-opacity duration-300 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
       <div className="relative h-64 md:h-96">
-        {images.length > 0 ? (
+        {currentImageIndex < images.length ? (
           <img 
-            src={images[currentImageIndex]} 
+            src={allImages[currentImageIndex]} 
             alt="Property" 
             className="w-full h-full object-cover cursor-pointer" 
             onClick={handleImageClick}
           />
         ) : (
-          <div className="w-full h-full bg-gray-200 flex items-center justify-center">No image available</div>
+          <GoogleMap address={address} />
         )}
-        {images.length > 1 && (
+        {totalImages > 1 && (
           <>
             <Button variant="outline" className="absolute top-1/2 left-2 transform -translate-y-1/2" onClick={prevImage}>
               <ChevronLeft className="w-4 h-4" />
@@ -64,7 +70,7 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({
           </>
         )}
         <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2">
-          {images.map((_, index) => (
+          {allImages.map((_, index) => (
             <span
               key={index}
               className={`inline-block w-2 h-2 rounded-full mx-1 ${
