@@ -113,8 +113,37 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({
         </Button>
         {showDetails && (
           <div className="mt-4 text-sm text-gray-600">
-            <p>Additional property details go here...</p>
-            {/* Add more detailed information about the property */}
+            <h3 className="font-semibold text-lg mb-2">Descriptions</h3>
+            <h4 className="font-semibold mb-2">Modern Studio Apartment in the Heart of Hanoi</h4>
+            <ul className="list-disc pl-5 mb-4">
+              <li>Location: {address}</li>
+              <li>Price: {price} per month</li>
+              <li>Size: {squareMeters} sqm</li>
+              <li>Type: Studio Apartment</li>
+            </ul>
+            <h4 className="font-semibold mb-2">Features and Amenities</h4>
+            <ul className="list-disc pl-5 mb-4">
+              <li>Fully furnished with modern decor and appliances.</li>
+              <li>Open-concept living space with a comfortable bed, sofa, and dining area.</li>
+              <li>Well-equipped kitchenette with refrigerator, stove, microwave, and utensils.</li>
+              <li>Private bathroom with shower and hot water supply.</li>
+              <li>Air conditioning and high-speed internet connection included.</li>
+              <li>Access to shared laundry facilities within the building.</li>
+            </ul>
+            <h4 className="font-semibold mb-2">Building Facilities</h4>
+            <p className="mb-2">The apartment is located within a well-maintained residential building that offers:</p>
+            <ul className="list-disc pl-5 mb-4">
+              <li>24/7 security surveillance for enhanced safety.</li>
+              <li>Elevator access to all floors for convenience.</li>
+              <li>Rooftop garden providing scenic views of the city.</li>
+            </ul>
+            <h4 className="font-semibold mb-2">Location</h4>
+            <p className="mb-2">Situated in the heart of Hanoi's vibrant district:</p>
+            <ul className="list-disc pl-5">
+              <li>Walking distance to popular attractions like Hoan Kiem Lake and Old Quarter.</li>
+              <li>Close proximity to cafes, restaurants, shopping centers, and entertainment venues.</li>
+              <li>Excellent public transportation connectivity.</li>
+            </ul>
           </div>
         )}
       </div>
