@@ -5,11 +5,15 @@ interface PropertyListingProps {
   price: string;
   address: string;
   isSelected?: boolean;
+  onClick?: () => void;
 }
 
-const PropertyListing: React.FC<PropertyListingProps> = ({ price, address, isSelected = false }) => {
+const PropertyListing: React.FC<PropertyListingProps> = ({ price, address, isSelected = false, onClick }) => {
   return (
-    <div className={`flex items-center p-4 mb-2 rounded-lg ${isSelected ? 'bg-green-100' : 'bg-white'} shadow`}>
+    <div 
+      className={`flex items-center p-4 mb-2 rounded-lg ${isSelected ? 'bg-green-100' : 'bg-white'} shadow cursor-pointer`}
+      onClick={onClick}
+    >
       <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
         <Home className="w-6 h-6 text-gray-500" />
       </div>

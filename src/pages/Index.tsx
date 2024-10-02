@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import UserProfile from '@/components/UserProfile';
 import PropertyListing from '@/components/PropertyListing';
 import PropertyDetails from '@/components/PropertyDetails';
+import MessagingScreen from '@/components/MessagingScreen';
 import { toast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { ThumbsUp, X } from 'lucide-react';
@@ -54,8 +55,14 @@ const properties = [
 const Index = () => {
   const [currentPropertyIndex, setCurrentPropertyIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [likedProperties, setLikedProperties] = useState([]);
+  const [selectedProperty, setSelectedProperty] = useState(null);
 
   const handleLike = () => {
+    const currentProperty = properties[currentPropertyIndex];
+    if (!likedProperties.some(prop => prop.id === currentProperty.id)) {
+      setLikedProperties([...likedProperties, currentProperty]);
+    }
     toast({
       title: "Liked!",
       description: "You liked this property.",
@@ -79,43 +86,54 @@ const Index = () => {
     }, 300);
   };
 
+  const handlePropertyClick = (property) => {
+    setSelectedProperty(property);
+  };
+
   const currentProperty = properties[currentPropertyIndex];
 
   return (
     <div className="min-h-screen bg-gray-100 flex">
       <div className="w-1/4 p-4 bg-white border-r">
         <UserProfile name="John Doe" status="Active renter" />
-        <h2 className="mt-8 mb-4 text-xl font-semibold">Units Listing</h2>
-        {properties.map((property, index) => (
+        <h2 className="mt-8 mb-4 text-xl font-semibold">Liked Units</h2>
+        {likedProperties.map((property) => (
           <PropertyListing
             key={property.id}
             price={property.price}
             address={property.address}
-            isSelected={index === currentPropertyIndex}
+            isSelected={selectedProperty && selectedProperty.id === property.id}
+            onClick={() => handlePropertyClick(property)}
           />
         ))}
       </div>
       <div className="flex-1 p-8 flex flex-col">
-        <PropertyDetails 
-          images={currentProperty.images}
-          price={currentProperty.price}
-          address={currentProperty.address}
-          postedTime={currentProperty.postedTime}
-          isAnimating={isAnimating}
-          squareMeters={currentProperty.squareMeters}
-          bedrooms={currentProperty.bedrooms}
-          bathrooms={currentProperty.bathrooms}
-        />
-        <div className="flex justify-between mt-4">
-          <Button variant="destructive" className="w-1/3" onClick={handleDislike}>
-            <X className="w-4 h-4 mr-2" />
-            Dislike
-          </Button>
-          <Button variant="default" className="w-1/2 bg-green-500 hover:bg-green-600" onClick={handleLike}>
-            <ThumbsUp className="w-4 h-4 mr-2" />
-            Like
-          </Button>
-        </div>
+        {selectedProperty ? (
+          <MessagingScreen property={selectedProperty} onClose={() => setSelectedProperty(null)} />
+        ) : (
+          <>
+            <PropertyDetails 
+              images={currentProperty.images}
+              price={currentProperty.price}
+              address={currentProperty.address}
+              postedTime={currentProperty.postedTime}
+              isAnimating={isAnimating}
+              squareMeters={currentProperty.squareMeters}
+              bedrooms={currentProperty.bedrooms}
+              bathrooms={currentProperty.bathrooms}
+            />
+            <div className="flex justify-between mt-4">
+              <Button variant="destructive" className="w-1/3" onClick={handleDislike}>
+                <X className="w-4 h-4 mr-2" />
+                Dislike
+              </Button>
+              <Button variant="default" className="w-1/2 bg-green-500 hover:bg-green-600" onClick={handleLike}>
+                <ThumbsUp className="w-4 h-4 mr-2" />
+                Like
+              </Button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
