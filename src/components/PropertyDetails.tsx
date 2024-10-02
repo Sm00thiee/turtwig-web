@@ -42,7 +42,7 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({
 
   return (
     <div className={`bg-white rounded-lg shadow-lg overflow-hidden transition-opacity duration-300 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
-      <div className="relative h-96">
+      <div className="relative h-64 md:h-96">
         {images.length > 0 ? (
           <img 
             src={images[currentImageIndex]} 

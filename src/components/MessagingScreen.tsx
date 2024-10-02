@@ -34,9 +34,9 @@ const MessagingScreen: React.FC<MessagingScreenProps> = ({ property, onClose }) 
           <X className="w-6 h-6" />
         </Button>
       </div>
-      <div className="flex-grow flex overflow-hidden">
+      <div className="flex-grow flex flex-col md:flex-row overflow-hidden">
         {/* Left panel: Chat messages */}
-        <div className="w-1/2 flex flex-col">
+        <div className="w-full md:w-1/2 flex flex-col">
           <div className="flex-grow overflow-y-auto p-4">
             {/* Chat messages would be displayed here */}
             <p className="text-gray-500 text-center">No messages yet. Start the conversation!</p>
@@ -58,7 +58,7 @@ const MessagingScreen: React.FC<MessagingScreenProps> = ({ property, onClose }) 
           </div>
         </div>
         {/* Right panel: Property details */}
-        <div className="w-1/2 border-l overflow-y-auto">
+        <div className="w-full md:w-1/2 border-t md:border-t-0 md:border-l overflow-y-auto">
           <div className="p-4">
             <div className="flex flex-wrap gap-2 mb-4">
               {property.images.map((image, index) => (

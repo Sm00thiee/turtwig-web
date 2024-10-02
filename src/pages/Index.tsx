@@ -93,21 +93,23 @@ const Index = () => {
   const currentProperty = properties[currentPropertyIndex];
 
   return (
-    <div className="min-h-screen bg-gray-100 flex">
-      <div className="w-1/4 p-4 bg-white border-r">
+    <div className="min-h-screen bg-gray-100 flex flex-col md:flex-row">
+      <div className="w-full md:w-1/4 p-4 bg-white border-b md:border-r md:border-b-0">
         <UserProfile name="John Doe" status="Active renter" />
         <h2 className="mt-8 mb-4 text-xl font-semibold">Liked Units</h2>
-        {likedProperties.map((property) => (
-          <PropertyListing
-            key={property.id}
-            price={property.price}
-            address={property.address}
-            isSelected={selectedProperty && selectedProperty.id === property.id}
-            onClick={() => handlePropertyClick(property)}
-          />
-        ))}
+        <div className="overflow-y-auto max-h-[calc(100vh-200px)]">
+          {likedProperties.map((property) => (
+            <PropertyListing
+              key={property.id}
+              price={property.price}
+              address={property.address}
+              isSelected={selectedProperty && selectedProperty.id === property.id}
+              onClick={() => handlePropertyClick(property)}
+            />
+          ))}
+        </div>
       </div>
-      <div className="flex-1 p-8 flex flex-col">
+      <div className="flex-1 p-4 md:p-8 flex flex-col">
         {selectedProperty ? (
           <MessagingScreen property={selectedProperty} onClose={() => setSelectedProperty(null)} />
         ) : (
