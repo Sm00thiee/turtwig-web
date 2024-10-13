@@ -1,4 +1,5 @@
 import React from 'react';
+import config from '../config.json';
 
 interface GoogleMapProps {
   address: string;
@@ -6,7 +7,7 @@ interface GoogleMapProps {
 
 const GoogleMap: React.FC<GoogleMapProps> = ({ address }) => {
   const encodedAddress = encodeURIComponent(address);
-  const mapUrl = `https://www.google.com/maps/embed/v1/place?key=YOUR_GOOGLE_MAPS_API_KEY&q=${encodedAddress}`;
+  const mapUrl = `https://www.google.com/maps/embed/v1/place?key=${config.googleMapsApiKey}&q=${encodedAddress}`;
 
   return (
     <iframe

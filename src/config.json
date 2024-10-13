@@ -1,0 +1,8 @@
+{
+  "googleMapsApiKey": "YOUR_GOOGLE_MAPS_API_KEY",
+  "apiHost": "http://localhost:3000",
+  "apiPaths": {
+    "properties": "/api/properties",
+    "user": "/api/user"
+  }
+}
