@@ -3,21 +3,15 @@ import { User, Edit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { User as UserType } from '../types/user';
 
-const UserProfileModal: React.FC = () => {
+interface UserProfileModalProps {
+  user: UserType;
+}
+
+const UserProfileModal: React.FC<UserProfileModalProps> = ({ user }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [userData, setUserData] = useState({
-    username: 'doeyjohn420',
-    email: 'johndoe@email.com',
-    firstName: 'John',
-    lastName: 'Doe',
-    gender: 'Male',
-    dob: '11/11/1999',
-    country: 'USA',
-    city: 'Santa Ana, Illinois',
-    address: '2972 Westheimer Rd. Santa Ana',
-    postalCode: '85486'
-  });
+  const [userData, setUserData] = useState(user);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -35,9 +29,13 @@ const UserProfileModal: React.FC = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-            <User className="w-8 h-8 text-gray-500" />
+            {userData.Avatar ? (
+              <img src={userData.Avatar} alt={userData.Username} className="w-full h-full object-cover rounded-full" />
+            ) : (
+              <User className="w-8 h-8 text-gray-500" />
+            )}
           </div>
-          <h2 className="ml-4 text-2xl font-bold">{userData.firstName} {userData.lastName}</h2>
+          <h2 className="ml-4 text-2xl font-bold">{userData.FirstName} {userData.LastName}</h2>
         </div>
         <Button variant="outline" size="sm" onClick={() => setIsEditing(!isEditing)}>
           <Edit className="w-4 h-4 mr-2" />
@@ -52,8 +50,8 @@ const UserProfileModal: React.FC = () => {
             <Label htmlFor="username">Username</Label>
             <Input
               id="username"
-              name="username"
-              value={userData.username}
+              name="Username"
+              value={userData.Username}
               onChange={handleInputChange}
               disabled={!isEditing}
             />
@@ -62,8 +60,8 @@ const UserProfileModal: React.FC = () => {
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
-              name="email"
-              value={userData.email}
+              name="Email"
+              value={userData.Email || ''}
               onChange={handleInputChange}
               disabled={!isEditing}
             />
@@ -72,8 +70,8 @@ const UserProfileModal: React.FC = () => {
             <Label htmlFor="firstName">First name</Label>
             <Input
               id="firstName"
-              name="firstName"
-              value={userData.firstName}
+              name="FirstName"
+              value={userData.FirstName || ''}
               onChange={handleInputChange}
               disabled={!isEditing}
             />
@@ -82,8 +80,8 @@ const UserProfileModal: React.FC = () => {
             <Label htmlFor="lastName">Last name</Label>
             <Input
               id="lastName"
-              name="lastName"
-              value={userData.lastName}
+              name="LastName"
+              value={userData.LastName || ''}
               onChange={handleInputChange}
               disabled={!isEditing}
             />
@@ -92,8 +90,8 @@ const UserProfileModal: React.FC = () => {
             <Label htmlFor="gender">Gender</Label>
             <Input
               id="gender"
-              name="gender"
-              value={userData.gender}
+              name="Gender"
+              value={userData.Gender || ''}
               onChange={handleInputChange}
               disabled={!isEditing}
             />
@@ -102,8 +100,8 @@ const UserProfileModal: React.FC = () => {
             <Label htmlFor="dob">DOB</Label>
             <Input
               id="dob"
-              name="dob"
-              value={userData.dob}
+              name="Dob"
+              value={userData.Dob || ''}
               onChange={handleInputChange}
               disabled={!isEditing}
             />
@@ -115,41 +113,31 @@ const UserProfileModal: React.FC = () => {
         <h3 className="text-lg font-semibold">Address</h3>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="country">Country</Label>
-            <Input
-              id="country"
-              name="country"
-              value={userData.country}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-            />
-          </div>
-          <div>
-            <Label htmlFor="city">City/State</Label>
-            <Input
-              id="city"
-              name="city"
-              value={userData.city}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-            />
-          </div>
-          <div>
-            <Label htmlFor="address">Home Address</Label>
+            <Label htmlFor="address">Address</Label>
             <Input
               id="address"
-              name="address"
-              value={userData.address}
+              name="Address"
+              value={userData.Address || ''}
               onChange={handleInputChange}
               disabled={!isEditing}
             />
           </div>
           <div>
-            <Label htmlFor="postalCode">Postal Code</Label>
+            <Label htmlFor="phone">Phone</Label>
             <Input
-              id="postalCode"
-              name="postalCode"
-              value={userData.postalCode}
+              id="phone"
+              name="Phone"
+              value={userData.Phone || ''}
+              onChange={handleInputChange}
+              disabled={!isEditing}
+            />
+          </div>
+          <div>
+            <Label htmlFor="language">Language</Label>
+            <Input
+              id="language"
+              name="Language"
+              value={userData.Language || ''}
               onChange={handleInputChange}
               disabled={!isEditing}
             />
