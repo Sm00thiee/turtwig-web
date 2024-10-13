@@ -10,7 +10,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Property } from '../types/property';
 
 const properties: Property[] = [
-const properties: Property[] = [
   {
     id: 1,
     price: "9.0 million/month",
@@ -53,7 +52,6 @@ const properties: Property[] = [
     bedrooms: 2,
     bathrooms: 1
   }
-];
 ];
 
 const Index = () => {
