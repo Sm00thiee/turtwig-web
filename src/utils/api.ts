@@ -1,9 +1,9 @@
-import { Property } from '../types/property';
-import { User } from '../types/user';
+import { PropertyInfo } from '../types/property';
+import { PaginationRequest, PaginationBaseResponse } from '../types/pagination';
 import config from '../config.json';
 
 // Mock data for properties
-const mockProperties: Property[] = [
+const mockProperties: PropertyInfo[] = [
   {
     Id: "1",
     Name: "Cozy Apartment",
@@ -38,7 +38,7 @@ const mockUser: User = {
   Language: "English",
 };
 
-export const fetchProperties = async (): Promise<Property[]> => {
+export const fetchProperties = async (): Promise<PropertyInfo[]> => {
   try {
     const response = await fetch(`${config.apiHost}${config.apiPaths.properties}`);
     if (!response.ok) {
@@ -61,5 +61,28 @@ export const fetchUser = async (): Promise<User> => {
   } catch (error) {
     console.error('Error fetching user data:', error);
     return mockUser;
+  }
+};
+
+export const fetchPaginatedProperties = async (
+  paginationRequest: PaginationRequest
+): Promise<PaginationBaseResponse<PropertyInfo>> => {
+  try {
+    const response = await fetch(`${config.apiHost}/api/properties`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(paginationRequest),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch paginated properties');
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching paginated properties:', error);
+    throw error;
   }
 };

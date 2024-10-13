@@ -1,4 +1,4 @@
-export interface Property {
+export interface PropertyInfo {
   Id: string;
   Name?: string;
   Description?: string;
