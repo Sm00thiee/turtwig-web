@@ -5,7 +5,8 @@ import PropertyDetails from '@/components/PropertyDetails';
 import MessagingScreen from '@/components/MessagingScreen';
 import { toast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { ThumbsUp, X } from 'lucide-react';
+import { ThumbsUp, X, Bookmark } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface Property {
   id: number;
@@ -67,6 +68,7 @@ const Index = () => {
   const [currentPropertyIndex, setCurrentPropertyIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [likedProperties, setLikedProperties] = useState<Property[]>([]);
+  const [bookmarkedProperties, setBookmarkedProperties] = useState<Property[]>([]);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   const [showUserPanel, setShowUserPanel] = useState(false);
 
@@ -88,6 +90,22 @@ const Index = () => {
       description: "You disliked this property.",
     });
     moveToNextProperty();
+  };
+
+  const handleBookmark = () => {
+    const currentProperty = properties[currentPropertyIndex];
+    if (!bookmarkedProperties.some(prop => prop.id === currentProperty.id)) {
+      setBookmarkedProperties([...bookmarkedProperties, currentProperty]);
+      toast({
+        title: "Bookmarked!",
+        description: "You bookmarked this property.",
+      });
+    } else {
+      toast({
+        title: "Already Bookmarked",
+        description: "This property is already in your bookmarks.",
+      });
+    }
   };
 
   const moveToNextProperty = () => {
@@ -112,18 +130,38 @@ const Index = () => {
         <div className={`bg-white md:w-1/4 md:min-h-screen transition-all duration-300 ease-in-out ${showUserPanel ? 'h-screen md:h-auto' : 'h-0 md:h-auto'} overflow-hidden`}>
           <div className="p-4">
             <UserProfile name="John Doe" status="Active renter" />
-            <h2 className="mt-8 mb-4 text-xl font-semibold">Liked Units</h2>
-            <div className="overflow-y-auto max-h-[calc(100vh-200px)]">
-              {likedProperties.map((property) => (
-                <PropertyListing
-                  key={property.id}
-                  price={property.price}
-                  address={property.address}
-                  isSelected={selectedProperty?.id === property.id}
-                  onClick={() => handlePropertyClick(property)}
-                />
-              ))}
-            </div>
+            <Tabs defaultValue="liked" className="mt-8">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="liked">Liked Units</TabsTrigger>
+                <TabsTrigger value="bookmarked">Bookmarked</TabsTrigger>
+              </TabsList>
+              <TabsContent value="liked">
+                <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
+                  {likedProperties.map((property) => (
+                    <PropertyListing
+                      key={property.id}
+                      price={property.price}
+                      address={property.address}
+                      isSelected={selectedProperty?.id === property.id}
+                      onClick={() => handlePropertyClick(property)}
+                    />
+                  ))}
+                </div>
+              </TabsContent>
+              <TabsContent value="bookmarked">
+                <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
+                  {bookmarkedProperties.map((property) => (
+                    <PropertyListing
+                      key={property.id}
+                      price={property.price}
+                      address={property.address}
+                      isSelected={selectedProperty?.id === property.id}
+                      onClick={() => handlePropertyClick(property)}
+                    />
+                  ))}
+                </div>
+              </TabsContent>
+            </Tabs>
           </div>
         </div>
 
@@ -144,11 +182,15 @@ const Index = () => {
                 bathrooms={currentProperty.bathrooms}
               />
               <div className="flex justify-between mt-4">
-                <Button variant="destructive" className="w-1/3" onClick={handleDislike}>
+                <Button variant="destructive" className="w-1/4" onClick={handleDislike}>
                   <X className="w-4 h-4 mr-2" />
                   Dislike
                 </Button>
-                <Button variant="default" className="w-1/2 bg-green-500 hover:bg-green-600" onClick={handleLike}>
+                <Button variant="outline" className="w-1/4" onClick={handleBookmark}>
+                  <Bookmark className="w-4 h-4 mr-2" />
+                  Bookmark
+                </Button>
+                <Button variant="default" className="w-1/4 bg-green-500 hover:bg-green-600" onClick={handleLike}>
                   <ThumbsUp className="w-4 h-4 mr-2" />
                   Like
                 </Button>
