@@ -1,10 +1,14 @@
 export interface Property {
-  id: number;
-  price: string;
-  address: string;
-  images: string[];
-  postedTime: string;
-  squareMeters: number;
-  bedrooms: number;
-  bathrooms: number;
+  Id: string;
+  Name?: string;
+  Description?: string;
+  MediaUrls: string[];
+  Address?: string;
+  Price?: string;
+  UpvoteCount?: string;
+  InterestCount?: string;
+  IsPublished: boolean;
+  PublishDateTime: string;
+  CreatedDate: string;
+  LastModifiedDate: string;
 }
