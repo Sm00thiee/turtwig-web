@@ -1,6 +1,7 @@
-import { PropertyInfo } from '../types/property';
-import { PaginationRequest, PaginationBaseResponse } from '../types/pagination';
-import config from '../config.json';
+import { PropertyInfo } from "../types/property";
+import { PaginationRequest, PaginationBaseResponse } from "../types/pagination";
+import config from "../config.json";
+import { User } from "@/types/user";
 
 // Mock data for properties
 const mockProperties: PropertyInfo[] = [
@@ -40,13 +41,15 @@ const mockUser: User = {
 
 export const fetchProperties = async (): Promise<PropertyInfo[]> => {
   try {
-    const response = await fetch(`${config.apiHost}${config.apiPaths.properties}`);
+    const response = await fetch(
+      `${config.apiHost}${config.apiPaths.properties}`
+    );
     if (!response.ok) {
-      throw new Error('Failed to fetch properties');
+      throw new Error("Failed to fetch properties");
     }
     return response.json();
   } catch (error) {
-    console.error('Error fetching properties:', error);
+    console.error("Error fetching properties:", error);
     return mockProperties;
   }
 };
@@ -55,11 +58,11 @@ export const fetchUser = async (): Promise<User> => {
   try {
     const response = await fetch(`${config.apiHost}${config.apiPaths.user}`);
     if (!response.ok) {
-      throw new Error('Failed to fetch user data');
+      throw new Error("Failed to fetch user data");
     }
     return response.json();
   } catch (error) {
-    console.error('Error fetching user data:', error);
+    console.error("Error fetching user data:", error);
     return mockUser;
   }
 };
@@ -69,20 +72,20 @@ export const fetchPaginatedProperties = async (
 ): Promise<PaginationBaseResponse<PropertyInfo>> => {
   try {
     const response = await fetch(`${config.apiHost}/api/properties`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(paginationRequest),
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch paginated properties');
+      throw new Error("Failed to fetch paginated properties");
     }
 
     return response.json();
   } catch (error) {
-    console.error('Error fetching paginated properties:', error);
+    console.error("Error fetching paginated properties:", error);
     throw error;
   }
 };
