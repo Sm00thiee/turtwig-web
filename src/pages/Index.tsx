@@ -68,6 +68,7 @@ const Index = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [likedProperties, setLikedProperties] = useState<Property[]>([]);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+  const [showUserPanel, setShowUserPanel] = useState(false);
 
   const handleLike = () => {
     const currentProperty = properties[currentPropertyIndex];
@@ -99,54 +100,72 @@ const Index = () => {
 
   const handlePropertyClick = (property: Property) => {
     setSelectedProperty(property);
+    setShowUserPanel(false);
   };
 
   const currentProperty = properties[currentPropertyIndex];
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col md:flex-row">
-      <div className="w-full md:w-1/4 p-4 bg-white border-b md:border-r md:border-b-0">
-        <UserProfile name="John Doe" status="Active renter" />
-        <h2 className="mt-8 mb-4 text-xl font-semibold">Liked Units</h2>
-        <div className="overflow-y-auto max-h-[calc(100vh-200px)]">
-          {likedProperties.map((property) => (
-            <PropertyListing
-              key={property.id}
-              price={property.price}
-              address={property.address}
-              isSelected={selectedProperty && selectedProperty.id === property.id}
-              onClick={() => handlePropertyClick(property)}
-            />
-          ))}
+    <div className="min-h-screen bg-gray-100 flex flex-col">
+      <div className="flex-1 flex flex-col md:flex-row">
+        {/* User Panel (Sidebar on desktop, full-width on mobile) */}
+        <div className={`bg-white md:w-1/4 md:min-h-screen transition-all duration-300 ease-in-out ${showUserPanel ? 'h-screen md:h-auto' : 'h-0 md:h-auto'} overflow-hidden`}>
+          <div className="p-4">
+            <UserProfile name="John Doe" status="Active renter" />
+            <h2 className="mt-8 mb-4 text-xl font-semibold">Liked Units</h2>
+            <div className="overflow-y-auto max-h-[calc(100vh-200px)]">
+              {likedProperties.map((property) => (
+                <PropertyListing
+                  key={property.id}
+                  price={property.price}
+                  address={property.address}
+                  isSelected={selectedProperty?.id === property.id}
+                  onClick={() => handlePropertyClick(property)}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1 p-4 md:p-8 flex flex-col">
+          {selectedProperty ? (
+            <MessagingScreen property={selectedProperty} onClose={() => setSelectedProperty(null)} />
+          ) : (
+            <>
+              <PropertyDetails 
+                images={currentProperty.images}
+                price={currentProperty.price}
+                address={currentProperty.address}
+                postedTime={currentProperty.postedTime}
+                isAnimating={isAnimating}
+                squareMeters={currentProperty.squareMeters}
+                bedrooms={currentProperty.bedrooms}
+                bathrooms={currentProperty.bathrooms}
+              />
+              <div className="flex justify-between mt-4">
+                <Button variant="destructive" className="w-1/3" onClick={handleDislike}>
+                  <X className="w-4 h-4 mr-2" />
+                  Dislike
+                </Button>
+                <Button variant="default" className="w-1/2 bg-green-500 hover:bg-green-600" onClick={handleLike}>
+                  <ThumbsUp className="w-4 h-4 mr-2" />
+                  Like
+                </Button>
+              </div>
+            </>
+          )}
         </div>
       </div>
-      <div className="flex-1 p-4 md:p-8 flex flex-col">
-        {selectedProperty ? (
-          <MessagingScreen property={selectedProperty} onClose={() => setSelectedProperty(null)} />
-        ) : (
-          <>
-            <PropertyDetails 
-              images={currentProperty.images}
-              price={currentProperty.price}
-              address={currentProperty.address}
-              postedTime={currentProperty.postedTime}
-              isAnimating={isAnimating}
-              squareMeters={currentProperty.squareMeters}
-              bedrooms={currentProperty.bedrooms}
-              bathrooms={currentProperty.bathrooms}
-            />
-            <div className="flex justify-between mt-4">
-              <Button variant="destructive" className="w-1/3" onClick={handleDislike}>
-                <X className="w-4 h-4 mr-2" />
-                Dislike
-              </Button>
-              <Button variant="default" className="w-1/2 bg-green-500 hover:bg-green-600" onClick={handleLike}>
-                <ThumbsUp className="w-4 h-4 mr-2" />
-                Like
-              </Button>
-            </div>
-          </>
-        )}
+
+      {/* Mobile Toggle for User Panel */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t p-2">
+        <Button 
+          onClick={() => setShowUserPanel(!showUserPanel)} 
+          className="w-full"
+        >
+          {showUserPanel ? 'Hide Profile' : 'Show Profile'}
+        </Button>
       </div>
     </div>
   );
