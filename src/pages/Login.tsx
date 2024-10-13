@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -19,6 +19,7 @@ const loginSchema = z.object({
 const Login: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
 
   const form = useForm<LoginRequestDto>({
@@ -45,9 +46,10 @@ const Login: React.FC = () => {
       }
 
       const loginResponse: LoginResponse = await response.json();
-      // Here you would typically store the token in localStorage or a secure cookie
       localStorage.setItem('token', loginResponse.token);
-      navigate(data.returnUrl);
+      
+      const from = (location.state as { from?: string })?.from || '/';
+      navigate(from);
     } catch (error) {
       toast({
         title: 'Error',
