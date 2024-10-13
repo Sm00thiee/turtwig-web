@@ -3,22 +3,13 @@ import UserProfile from '@/components/UserProfile';
 import PropertyListing from '@/components/PropertyListing';
 import PropertyDetails from '@/components/PropertyDetails';
 import MessagingScreen from '@/components/MessagingScreen';
+import PropertyActions from '@/components/PropertyActions';
 import { toast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { ThumbsUp, X, Bookmark } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Property } from '../types/property';
 
-interface Property {
-  id: number;
-  price: string;
-  address: string;
-  images: string[];
-  postedTime: string;
-  squareMeters: number;
-  bedrooms: number;
-  bathrooms: number;
-}
-
+const properties: Property[] = [
 const properties: Property[] = [
   {
     id: 1,
@@ -63,6 +54,7 @@ const properties: Property[] = [
     bathrooms: 1
   }
 ];
+];
 
 const Index = () => {
   const [currentPropertyIndex, setCurrentPropertyIndex] = useState(0);
@@ -72,39 +64,29 @@ const Index = () => {
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   const [showUserPanel, setShowUserPanel] = useState(false);
 
+  const currentProperty = properties[currentPropertyIndex];
+
   const handleLike = () => {
-    const currentProperty = properties[currentPropertyIndex];
     if (!likedProperties.some(prop => prop.id === currentProperty.id)) {
       setLikedProperties([...likedProperties, currentProperty]);
     }
-    toast({
-      title: "Liked!",
-      description: "You liked this property.",
-    });
+    showToast("Liked!", "You liked this property.");
     moveToNextProperty();
   };
 
   const handleDislike = () => {
-    toast({
-      title: "Disliked!",
-      description: "You disliked this property.",
-    });
+    showToast("Disliked!", "You disliked this property.");
     moveToNextProperty();
   };
 
   const handleBookmark = () => {
-    const currentProperty = properties[currentPropertyIndex];
-    if (!bookmarkedProperties.some(prop => prop.id === currentProperty.id)) {
-      setBookmarkedProperties([...bookmarkedProperties, currentProperty]);
-      toast({
-        title: "Bookmarked!",
-        description: "You bookmarked this property.",
-      });
+    const isBookmarked = bookmarkedProperties.some(prop => prop.id === currentProperty.id);
+    if (isBookmarked) {
+      setBookmarkedProperties(bookmarkedProperties.filter(prop => prop.id !== currentProperty.id));
+      showToast("Removed from Bookmarks", "This property has been removed from your bookmarks.");
     } else {
-      toast({
-        title: "Already Bookmarked",
-        description: "This property is already in your bookmarks.",
-      });
+      setBookmarkedProperties([...bookmarkedProperties, currentProperty]);
+      showToast("Bookmarked!", "You bookmarked this property.");
     }
   };
 
@@ -121,12 +103,19 @@ const Index = () => {
     setShowUserPanel(false);
   };
 
-  const currentProperty = properties[currentPropertyIndex];
+  const showToast = (title: string, description: string) => {
+    toast({
+      title,
+      description,
+      duration: 3000,
+      className: "top-right-toast",
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       <div className="flex-1 flex flex-col md:flex-row">
-        {/* User Panel (Sidebar on desktop, full-width on mobile) */}
+        {/* User Panel */}
         <div className={`bg-white md:w-1/4 md:min-h-screen transition-all duration-300 ease-in-out ${showUserPanel ? 'h-screen md:h-auto' : 'h-0 md:h-auto'} overflow-hidden`}>
           <div className="p-4">
             <UserProfile name="John Doe" status="Active renter" />
@@ -181,20 +170,13 @@ const Index = () => {
                 bedrooms={currentProperty.bedrooms}
                 bathrooms={currentProperty.bathrooms}
               />
-              <div className="flex justify-between mt-4">
-                <Button variant="destructive" className="w-1/4" onClick={handleDislike}>
-                  <X className="w-4 h-4 mr-2" />
-                  Dislike
-                </Button>
-                <Button variant="outline" className="w-1/4" onClick={handleBookmark}>
-                  <Bookmark className="w-4 h-4 mr-2" />
-                  Bookmark
-                </Button>
-                <Button variant="default" className="w-1/4 bg-green-500 hover:bg-green-600" onClick={handleLike}>
-                  <ThumbsUp className="w-4 h-4 mr-2" />
-                  Like
-                </Button>
-              </div>
+              <PropertyActions
+                currentProperty={currentProperty}
+                onDislike={handleDislike}
+                onBookmark={handleBookmark}
+                onLike={handleLike}
+                isBookmarked={bookmarkedProperties.some(prop => prop.id === currentProperty.id)}
+              />
             </>
           )}
         </div>
