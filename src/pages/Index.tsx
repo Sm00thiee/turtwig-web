@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import UserProfile from '@/components/UserProfile';
 import PropertyListing from '@/components/PropertyListing';
@@ -11,20 +11,82 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Property } from '../types/property';
 import config from '../config.json';
 
-const fetchProperties = async (): Promise<Property[]> => {
-  const response = await fetch(`${config.apiHost}${config.apiPaths.properties}`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch properties');
+// Mock data for properties
+const mockProperties: Property[] = [
+  {
+    id: 1,
+    price: "9.0 million/month",
+    address: "18 Ngoc Tu Gate, Van Mieu, Dong Da, Ha Noi",
+    images: [
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+    ],
+    postedTime: "8 hours ago",
+    squareMeters: 60,
+    bedrooms: 2,
+    bathrooms: 2
+  },
+  {
+    id: 2,
+    price: "10.0 million/month",
+    address: "48 Xuan Dieu, Tay Ho, Dong Da, Ha Noi",
+    images: [
+      "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+    ],
+    postedTime: "12 hours ago",
+    squareMeters: 75,
+    bedrooms: 3,
+    bathrooms: 2
+  },
+  {
+    id: 3,
+    price: "9.0 million/month",
+    address: "22 Lieu Giai, Ba Dinh, Ha Noi",
+    images: [
+      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+    ],
+    postedTime: "1 day ago",
+    squareMeters: 55,
+    bedrooms: 2,
+    bathrooms: 1
   }
-  return response.json();
+];
+
+// Mock data for user
+const mockUser = {
+  name: "John Doe",
+  status: "Active renter"
+};
+
+const fetchProperties = async (): Promise<Property[]> => {
+  try {
+    const response = await fetch(`${config.apiHost}${config.apiPaths.properties}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch properties');
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching properties:', error);
+    return mockProperties;
+  }
 };
 
 const fetchUser = async () => {
-  const response = await fetch(`${config.apiHost}${config.apiPaths.user}`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch user data');
+  try {
+    const response = await fetch(`${config.apiHost}${config.apiPaths.user}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch user data');
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    return mockUser;
   }
-  return response.json();
 };
 
 const Index = () => {
@@ -35,12 +97,13 @@ const Index = () => {
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   const [showUserPanel, setShowUserPanel] = useState(false);
 
-  const { data: properties, isLoading: propertiesLoading, error: propertiesError } = useQuery({
+
+  const { data: properties, isLoading: propertiesLoading } = useQuery({
     queryKey: ['properties'],
     queryFn: fetchProperties,
   });
 
-  const { data: user, isLoading: userLoading, error: userError } = useQuery({
+  const { data: user, isLoading: userLoading } = useQuery({
     queryKey: ['user'],
     queryFn: fetchUser,
   });
@@ -99,10 +162,6 @@ const Index = () => {
 
   if (propertiesLoading || userLoading) {
     return <div>Loading...</div>;
-  }
-
-  if (propertiesError || userError) {
-    return <div>Error loading data</div>;
   }
 
   return (
