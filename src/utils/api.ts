@@ -42,7 +42,10 @@ const mockUser: User = {
 export const fetchProperties = async (): Promise<PropertyInfo[]> => {
   try {
     const response = await fetch(
-      `${config.apiHost}${config.apiPaths.properties}`
+      `${config.apiHost}${config.apiPaths.properties}`,
+      {
+        credentials: 'include', // This ensures cookies are sent with the request
+      }
     );
     if (!response.ok) {
       throw new Error("Failed to fetch properties");
@@ -56,7 +59,9 @@ export const fetchProperties = async (): Promise<PropertyInfo[]> => {
 
 export const fetchUser = async (): Promise<User> => {
   try {
-    const response = await fetch(`${config.apiHost}${config.apiPaths.user}`);
+    const response = await fetch(`${config.apiHost}${config.apiPaths.user}`, {
+      credentials: 'include', // This ensures cookies are sent with the request
+    });
     if (!response.ok) {
       throw new Error("Failed to fetch user data");
     }
@@ -77,6 +82,7 @@ export const fetchPaginatedProperties = async (
         "Content-Type": "application/json",
       },
       body: JSON.stringify(paginationRequest),
+      credentials: 'include', // This ensures cookies are sent with the request
     });
 
     if (!response.ok) {
@@ -88,4 +94,18 @@ export const fetchPaginatedProperties = async (
     console.error("Error fetching paginated properties:", error);
     throw error;
   }
+};
+
+// Add a new utility function for making authenticated requests
+export const authenticatedFetch = async (url: string, options: RequestInit = {}) => {
+  const response = await fetch(url, {
+    ...options,
+    credentials: 'include', // This ensures cookies are sent with the request
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
 };

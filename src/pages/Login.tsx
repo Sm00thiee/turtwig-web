@@ -39,6 +39,7 @@ const Login: React.FC = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
+        credentials: 'include', // This ensures cookies are sent with the request
       });
 
       if (!response.ok) {
@@ -46,7 +47,7 @@ const Login: React.FC = () => {
       }
 
       const loginResponse: LoginResponse = await response.json();
-      localStorage.setItem('token', loginResponse.token);
+      // The JWT token should now be automatically stored in the browser's cookies
       
       const from = (location.state as { from?: string })?.from || '/';
       navigate(from);
