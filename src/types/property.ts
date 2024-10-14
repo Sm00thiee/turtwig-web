@@ -5,9 +5,10 @@ export interface PropertyInfo {
   MediaUrls: string[];
   Address?: string;
   Price?: string;
-  UpvoteCount?: string;
+  UpvoteUsers: string[];
   InterestCount?: string;
   IsPublished: boolean;
+  UserId: string;
   PublishDateTime: string;
   CreatedDate: string;
   LastModifiedDate: string;

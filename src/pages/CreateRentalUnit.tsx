@@ -4,6 +4,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import { authenticatedFetch } from '../utils/api';
 
 const CreateRentalUnit: React.FC = () => {
@@ -11,6 +12,7 @@ const CreateRentalUnit: React.FC = () => {
   const [description, setDescription] = useState('');
   const [address, setAddress] = useState('');
   const [price, setPrice] = useState('');
+  const [isPublished, setIsPublished] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -27,6 +29,11 @@ const CreateRentalUnit: React.FC = () => {
           Description: description,
           Address: address,
           Price: price,
+          IsPublished: isPublished,
+          MediaUrls: [], // Initialize as empty array
+          UpvoteUsers: [], // Initialize as empty array
+          InterestCount: "0", // Initialize as "0"
+          PublishDateTime: new Date().toISOString(),
         }),
       });
 
@@ -79,11 +86,21 @@ const CreateRentalUnit: React.FC = () => {
           <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price</label>
           <Input
             id="price"
-            type="number"
+            type="text"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             required
           />
+        </div>
+        <div className="flex items-center space-x-2">
+          <Switch
+            id="isPublished"
+            checked={isPublished}
+            onCheckedChange={setIsPublished}
+          />
+          <label htmlFor="isPublished" className="text-sm font-medium text-gray-700">
+            Publish Immediately
+          </label>
         </div>
         <Button type="submit">Create Rental Unit</Button>
       </form>
