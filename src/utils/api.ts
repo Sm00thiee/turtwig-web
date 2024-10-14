@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { PropertyInfo } from "../types/property";
 import { PaginationRequest, PaginationBaseResponse } from "../types/pagination";
 import config from "../config.json";
@@ -15,9 +16,10 @@ const mockProperties: PropertyInfo[] = [
     ],
     Address: "18 Ngoc Tu Gate, Van Mieu, Dong Da, Ha Noi",
     Price: "9.0 million/month",
-    UpvoteCount: "10",
+    UpvoteUsers: [],
     InterestCount: "5",
     IsPublished: true,
+    UserId: "user123",
     PublishDateTime: new Date().toISOString(),
     CreatedDate: new Date().toISOString(),
     LastModifiedDate: new Date().toISOString(),
@@ -41,16 +43,10 @@ const mockUser: User = {
 
 export const fetchProperties = async (): Promise<PropertyInfo[]> => {
   try {
-    const response = await fetch(
-      `${config.apiHost}${config.apiPaths.properties}`,
-      {
-        credentials: 'include', // This ensures cookies are sent with the request
-      }
-    );
-    if (!response.ok) {
-      throw new Error("Failed to fetch properties");
-    }
-    return response.json();
+    const response = await axios.get(`${config.apiHost}${config.apiPaths.properties}`, {
+      withCredentials: true,
+    });
+    return response.data;
   } catch (error) {
     console.error("Error fetching properties:", error);
     return mockProperties;
@@ -59,13 +55,10 @@ export const fetchProperties = async (): Promise<PropertyInfo[]> => {
 
 export const fetchUser = async (): Promise<User> => {
   try {
-    const response = await fetch(`${config.apiHost}${config.apiPaths.user}`, {
-      credentials: 'include', // This ensures cookies are sent with the request
+    const response = await axios.get(`${config.apiHost}${config.apiPaths.user}`, {
+      withCredentials: true,
     });
-    if (!response.ok) {
-      throw new Error("Failed to fetch user data");
-    }
-    return response.json();
+    return response.data;
   } catch (error) {
     console.error("Error fetching user data:", error);
     return mockUser;
@@ -76,20 +69,10 @@ export const fetchPaginatedProperties = async (
   paginationRequest: PaginationRequest
 ): Promise<PaginationBaseResponse<PropertyInfo>> => {
   try {
-    const response = await fetch(`${config.apiHost}/api/properties`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(paginationRequest),
-      credentials: 'include', // This ensures cookies are sent with the request
+    const response = await axios.post(`${config.apiHost}/api/properties`, paginationRequest, {
+      withCredentials: true,
     });
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch paginated properties");
-    }
-
-    return response.json();
+    return response.data;
   } catch (error) {
     console.error("Error fetching paginated properties:", error);
     throw error;
@@ -97,15 +80,16 @@ export const fetchPaginatedProperties = async (
 };
 
 // Add a new utility function for making authenticated requests
-export const authenticatedFetch = async (url: string, options: RequestInit = {}) => {
-  const response = await fetch(url, {
-    ...options,
-    credentials: 'include', // This ensures cookies are sent with the request
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+export const authenticatedFetch = async (url: string, options: any = {}) => {
+  try {
+    const response = await axios({
+      url,
+      ...options,
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`HTTP error! status: ${(error as any).response?.status}`);
+    throw error;
   }
-
-  return response.json();
 };
