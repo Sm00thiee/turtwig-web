@@ -87,8 +87,20 @@ export const updateUserProfile = async (updatedUser: Partial<User>): Promise<Use
   await new Promise(resolve => setTimeout(resolve, 1000));
   console.log('Updated user profile:', updatedUser);
   
+  const mockUser: User = {
+    avatar: null,
+    email: "rentee-john-doe@yopmail.com",
+    username: "doeyjohn420",
+    firstName: "John",
+    lastName: "Doe",
+    phone: null,
+    dob: "2024-01-02",
+    gender: "male",
+    address: null,
+    language: null
+  };
+
   // In a real scenario, you would merge the updatedUser with the existing user data
-  // For this mock, we'll just return the updated fields along with some default values
   return {
     ...mockUser,
     ...updatedUser,

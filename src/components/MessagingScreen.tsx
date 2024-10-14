@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { X, Send } from 'lucide-react';
-import { Property } from '../types/property';
+import { PropertyInfo } from '../types/property';
 
 interface MessagingScreenProps {
-  property: Property;
+  property: PropertyInfo;
   onClose: () => void;
 }
 

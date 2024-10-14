@@ -6,6 +6,7 @@ import { PaginationRequest } from '../types/pagination';
 import PropertyDetails from './PropertyDetails';
 import PropertyActions from './PropertyActions';
 import PropertyList from './PropertyList';
+import MessagingScreen from './MessagingScreen';
 
 const PaginatedPropertyList: React.FC = () => {
   const [paginationRequest, setPaginationRequest] = useState<PaginationRequest>({
@@ -18,6 +19,7 @@ const PaginatedPropertyList: React.FC = () => {
   const [currentPropertyIndex, setCurrentPropertyIndex] = useState(0);
   const [likedProperties, setLikedProperties] = useState<PropertyInfo[]>([]);
   const [bookmarkedProperties, setBookmarkedProperties] = useState<PropertyInfo[]>([]);
+  const [selectedProperty, setSelectedProperty] = useState<PropertyInfo | null>(null);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['paginatedProperties', paginationRequest],
@@ -63,13 +65,19 @@ const PaginatedPropertyList: React.FC = () => {
   const handleBookmark = () => {
     if (currentProperty) {
       if (bookmarkedProperties.some(p => p.id === currentProperty.id)) {
-        // Remove from bookmarks if already bookmarked
         setBookmarkedProperties(prev => prev.filter(p => p.id !== currentProperty.id));
       } else {
-        // Add to bookmarks if not already bookmarked
         setBookmarkedProperties(prev => [...prev, currentProperty]);
       }
     }
+  };
+
+  const handlePropertyClick = (property: PropertyInfo) => {
+    setSelectedProperty(property);
+  };
+
+  const handleCloseChat = () => {
+    setSelectedProperty(null);
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -83,10 +91,13 @@ const PaginatedPropertyList: React.FC = () => {
         <PropertyList
           likedProperties={likedProperties}
           bookmarkedProperties={bookmarkedProperties}
+          onPropertyClick={handlePropertyClick}
         />
       </div>
       <div className="w-2/3">
-        {currentProperty && (
+        {selectedProperty ? (
+          <MessagingScreen property={selectedProperty} onClose={handleCloseChat} />
+        ) : currentProperty ? (
           <>
             <PropertyDetails property={currentProperty} isAnimating={false} />
             <PropertyActions
@@ -97,7 +108,7 @@ const PaginatedPropertyList: React.FC = () => {
               isBookmarked={bookmarkedProperties.some(p => p.id === currentProperty.id)}
             />
           </>
-        )}
+        ) : null}
       </div>
     </div>
   );

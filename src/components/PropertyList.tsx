@@ -5,11 +5,13 @@ import { PropertyInfo } from '../types/property';
 interface PropertyListProps {
   likedProperties: PropertyInfo[];
   bookmarkedProperties: PropertyInfo[];
+  onPropertyClick: (property: PropertyInfo) => void;
 }
 
 const PropertyList: React.FC<PropertyListProps> = ({
   likedProperties,
-  bookmarkedProperties
+  bookmarkedProperties,
+  onPropertyClick
 }) => {
   return (
     <Tabs defaultValue="liked" className="w-full">
@@ -20,7 +22,11 @@ const PropertyList: React.FC<PropertyListProps> = ({
       <TabsContent value="liked">
         <div className="space-y-2">
           {likedProperties.map((property) => (
-            <div key={property.id} className="p-2 border rounded">
+            <div 
+              key={property.id} 
+              className="p-2 border rounded cursor-pointer hover:bg-gray-100"
+              onClick={() => onPropertyClick(property)}
+            >
               <h3 className="font-bold">{property.price}</h3>
               <p className="text-sm">{property.address}</p>
             </div>
@@ -30,7 +36,11 @@ const PropertyList: React.FC<PropertyListProps> = ({
       <TabsContent value="bookmarked">
         <div className="space-y-2">
           {bookmarkedProperties.map((property) => (
-            <div key={property.id} className="p-2 border rounded">
+            <div 
+              key={property.id} 
+              className="p-2 border rounded cursor-pointer hover:bg-gray-100"
+              onClick={() => onPropertyClick(property)}
+            >
               <h3 className="font-bold">{property.price}</h3>
               <p className="text-sm">{property.address}</p>
             </div>
