@@ -9,6 +9,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { LoginRequestDto, LoginResponse } from '@/types/auth';
 import { useToast } from '@/hooks/use-toast';
+import config from "../config.json";
 
 const loginSchema = z.object({
   username: z.string().min(1, 'Username is required'),
@@ -35,7 +36,7 @@ const Login: React.FC = () => {
   const onSubmit = async (data: LoginRequestDto) => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch(`${config.apiHost}${config.apiPaths.login}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
