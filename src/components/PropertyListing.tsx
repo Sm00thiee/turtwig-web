@@ -18,8 +18,8 @@ const PropertyListing: React.FC<PropertyListingProps> = ({ property, isSelected 
         <Home className="w-6 h-6 text-gray-500" />
       </div>
       <div className="ml-4 flex-grow">
-        <h3 className="text-lg font-semibold">{property.Price}</h3>
-        <p className="text-sm text-gray-500">{property.Address}</p>
+        <h3 className="text-lg font-semibold">{property.price}</h3>
+        <p className="text-sm text-gray-500">{property.address}</p>
       </div>
       {isSelected && <DollarSign className="w-6 h-6 text-green-500" />}
     </div>

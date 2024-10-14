@@ -5,7 +5,6 @@ import { PropertyInfo } from '../types/property';
 import { PaginationRequest } from '../types/pagination';
 import PropertyListing from './PropertyListing';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const PaginatedPropertyList: React.FC = () => {
@@ -44,9 +43,8 @@ const PaginatedPropertyList: React.FC = () => {
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Sort by</SelectItem>
-            <SelectItem value="Price">Price</SelectItem>
-            <SelectItem value="PublishDateTime">Publish Date</SelectItem>
+            <SelectItem value="price">Price</SelectItem>
+            <SelectItem value="publishDateTime">Publish Date</SelectItem>
           </SelectContent>
         </Select>
         <Button onClick={handleOrderChange}>
@@ -55,7 +53,7 @@ const PaginatedPropertyList: React.FC = () => {
       </div>
       <div className="space-y-2">
         {data?.items.map((property: PropertyInfo) => (
-          <PropertyListing key={property.Id} property={property} />
+          <PropertyListing key={property.id} property={property} />
         ))}
       </div>
       <div className="flex justify-between items-center">

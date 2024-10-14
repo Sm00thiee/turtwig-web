@@ -1,17 +1,16 @@
 export interface PropertyInfo {
-  Id: string;
-  Name?: string;
-  Description?: string;
-  MediaUrls: string[];
-  Address?: string;
-  Price?: string;
-  UpvoteUsers: string[];
-  InterestCount?: string;
-  IsPublished: boolean;
-  UserId: string;
-  PublishDateTime: string;
-  CreatedDate: string;
-  LastModifiedDate: string;
+  id: string;
+  name?: string;
+  description?: string;
+  mediaUrls: string[];
+  address?: string;
+  price?: string;
+  upvoteCount: number | null;
+  interestCount?: string;
+  isPublished: boolean;
+  publishDateTime: string;
+  createdDate: string;
+  lastModifiedDate: string;
 }
 
 export type Property = PropertyInfo;
