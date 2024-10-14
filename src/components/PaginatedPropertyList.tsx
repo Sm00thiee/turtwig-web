@@ -3,26 +3,25 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchPaginatedProperties } from '../utils/api';
 import { PropertyInfo } from '../types/property';
 import { PaginationRequest } from '../types/pagination';
-import PropertyListing from './PropertyListing';
+import PropertyDetails from './PropertyDetails';
+import PropertyActions from './PropertyActions';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const PaginatedPropertyList: React.FC = () => {
   const [paginationRequest, setPaginationRequest] = useState<PaginationRequest>({
     pageIndex: 1,
-    pageSize: 10,
+    pageSize: 1,
     sortBy: '',
     isDescending: true,
   });
+
+  const [currentPropertyIndex, setCurrentPropertyIndex] = useState(0);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['paginatedProperties', paginationRequest],
     queryFn: () => fetchPaginatedProperties(paginationRequest),
   });
-
-  const handlePageChange = (newPageIndex: number) => {
-    setPaginationRequest(prev => ({ ...prev, pageIndex: newPageIndex }));
-  };
 
   const handleSortChange = (value: string) => {
     setPaginationRequest(prev => ({ ...prev, sortBy: value }));
@@ -32,8 +31,28 @@ const PaginatedPropertyList: React.FC = () => {
     setPaginationRequest(prev => ({ ...prev, isDescending: !prev.isDescending }));
   };
 
+  const handleNextProperty = () => {
+    if (data && currentPropertyIndex < data.items.length - 1) {
+      setCurrentPropertyIndex(prev => prev + 1);
+    } else {
+      setPaginationRequest(prev => ({ ...prev, pageIndex: prev.pageIndex + 1 }));
+      setCurrentPropertyIndex(0);
+    }
+  };
+
+  const handlePreviousProperty = () => {
+    if (currentPropertyIndex > 0) {
+      setCurrentPropertyIndex(prev => prev - 1);
+    } else if (paginationRequest.pageIndex > 1) {
+      setPaginationRequest(prev => ({ ...prev, pageIndex: prev.pageIndex - 1 }));
+      setCurrentPropertyIndex(data?.items.length ? data.items.length - 1 : 0);
+    }
+  };
+
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {(error as Error).message}</div>;
+
+  const currentProperty = data?.items[currentPropertyIndex];
 
   return (
     <div className="space-y-4">
@@ -51,25 +70,26 @@ const PaginatedPropertyList: React.FC = () => {
           {paginationRequest.isDescending ? 'Descending' : 'Ascending'}
         </Button>
       </div>
-      <div className="space-y-2">
-        {data?.items.map((property: PropertyInfo) => (
-          <PropertyListing key={property.id} property={property} />
-        ))}
-      </div>
+      {currentProperty && (
+        <>
+          <PropertyDetails property={currentProperty} isAnimating={false} />
+          <PropertyActions
+            currentProperty={currentProperty}
+            onDislike={handleNextProperty}
+            onBookmark={() => {/* Implement bookmark logic */}}
+            onLike={handleNextProperty}
+            isBookmarked={false}
+          />
+        </>
+      )}
       <div className="flex justify-between items-center">
-        <Button
-          onClick={() => handlePageChange(paginationRequest.pageIndex - 1)}
-          disabled={paginationRequest.pageIndex === 1}
-        >
+        <Button onClick={handlePreviousProperty} disabled={paginationRequest.pageIndex === 1 && currentPropertyIndex === 0}>
           Previous
         </Button>
         <span>
-          Page {data?.pageIndex} of {data?.totalPages}
+          Property {currentPropertyIndex + 1} of {data?.totalCount || 0}
         </span>
-        <Button
-          onClick={() => handlePageChange(paginationRequest.pageIndex + 1)}
-          disabled={data?.pageIndex === data?.totalPages}
-        >
+        <Button onClick={handleNextProperty} disabled={paginationRequest.pageIndex === data?.totalPages && currentPropertyIndex === (data?.items.length || 0) - 1}>
           Next
         </Button>
       </div>

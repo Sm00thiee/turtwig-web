@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Clock, MapPin, ChevronLeft, ChevronRight, Home, Bath, BedDouble } from 'lucide-react';
+import { Clock, MapPin, ChevronLeft, ChevronRight, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import FullSizeImageModal from './FullSizeImageModal';
 import GoogleMap from './GoogleMap';
-import { Property } from '../types/property';
+import { PropertyInfo } from '../types/property';
 
 interface PropertyDetailsProps {
-  property: Property;
+  property: PropertyInfo;
   isAnimating: boolean;
 }
 
@@ -18,7 +18,7 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({
   const [showDetails, setShowDetails] = useState(false);
   const [showFullSizeImage, setShowFullSizeImage] = useState(false);
 
-  const allImages = [...(property.MediaUrls || []), 'map'];
+  const allImages = [...(property.mediaUrls || []), 'map'];
   const totalImages = allImages.length;
 
   const nextImage = () => {
@@ -30,7 +30,7 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({
   };
 
   const handleImageClick = () => {
-    if (currentImageIndex < (property.MediaUrls?.length || 0)) {
+    if (currentImageIndex < (property.mediaUrls?.length || 0)) {
       setShowFullSizeImage(true);
     }
   };
@@ -38,7 +38,7 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({
   return (
     <div className={`bg-white rounded-lg shadow-lg overflow-hidden transition-opacity duration-300 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
       <div className="relative h-64 md:h-96">
-        {currentImageIndex < (property.MediaUrls?.length || 0) ? (
+        {currentImageIndex < (property.mediaUrls?.length || 0) ? (
           <img 
             src={allImages[currentImageIndex]} 
             alt="Property" 
@@ -46,7 +46,7 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({
             onClick={handleImageClick}
           />
         ) : (
-          <GoogleMap address={property.Address || ''} />
+          <GoogleMap address={property.address || ''} />
         )}
         {totalImages > 1 && (
           <>
@@ -70,19 +70,19 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({
         </div>
       </div>
       <div className="p-6">
-        <h2 className="text-2xl font-bold mb-2">{property.Price}</h2>
+        <h2 className="text-2xl font-bold mb-2">{property.price}</h2>
         <div className="flex items-center text-gray-600 mb-2">
           <MapPin className="w-4 h-4 mr-2" />
-          <span>{property.Address}</span>
+          <span>{property.address}</span>
         </div>
         <div className="flex items-center text-gray-600 mb-4">
           <Clock className="w-4 h-4 mr-2" />
-          <span>{new Date(property.PublishDateTime).toLocaleString()}</span>
+          <span>{new Date(property.publishDateTime).toLocaleString()}</span>
         </div>
         <div className="flex justify-between items-center text-sm text-gray-600 mb-4">
           <div className="flex items-center">
             <Home className="w-4 h-4 mr-1" />
-            <span>{property.Name}</span>
+            <span>{property.name}</span>
           </div>
         </div>
         <Button 
@@ -95,13 +95,13 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({
         {showDetails && (
           <div className="mt-4 text-sm text-gray-600">
             <h3 className="font-semibold text-lg mb-2">Description</h3>
-            <p>{property.Description}</p>
+            <p>{property.description}</p>
           </div>
         )}
       </div>
-      {showFullSizeImage && property.MediaUrls && (
+      {showFullSizeImage && property.mediaUrls && (
         <FullSizeImageModal
-          imageUrl={property.MediaUrls[currentImageIndex]}
+          imageUrl={property.mediaUrls[currentImageIndex]}
           onClose={() => setShowFullSizeImage(false)}
         />
       )}
