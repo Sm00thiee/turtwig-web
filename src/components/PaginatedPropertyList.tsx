@@ -61,8 +61,14 @@ const PaginatedPropertyList: React.FC = () => {
   };
 
   const handleBookmark = () => {
-    if (currentProperty && !bookmarkedProperties.some(p => p.id === currentProperty.id)) {
-      setBookmarkedProperties(prev => [...prev, currentProperty]);
+    if (currentProperty) {
+      if (bookmarkedProperties.some(p => p.id === currentProperty.id)) {
+        // Remove from bookmarks if already bookmarked
+        setBookmarkedProperties(prev => prev.filter(p => p.id !== currentProperty.id));
+      } else {
+        // Add to bookmarks if not already bookmarked
+        setBookmarkedProperties(prev => [...prev, currentProperty]);
+      }
     }
   };
 
