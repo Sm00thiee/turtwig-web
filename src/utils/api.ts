@@ -1,95 +1,96 @@
-import axios from 'axios';
-import { PropertyInfo } from "../types/property";
-import { PaginationRequest, PaginationBaseResponse } from "../types/pagination";
-import config from "../config.json";
-import { User } from "@/types/user";
+import { PaginationRequest, PaginatedResponse } from '../types/pagination';
+import { PropertyInfo } from '../types/property';
+import { User } from '../types/user';
 
-// Mock data for properties
-const mockProperties: PropertyInfo[] = [
-  {
-    Id: "1",
-    Name: "Cozy Apartment",
-    Description: "A beautiful apartment in the heart of the city",
-    MediaUrls: [
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-    ],
-    Address: "18 Ngoc Tu Gate, Van Mieu, Dong Da, Ha Noi",
-    Price: "9.0 million/month",
-    UpvoteUsers: [],
-    InterestCount: "5",
-    IsPublished: true,
-    UserId: "user123",
-    PublishDateTime: new Date().toISOString(),
-    CreatedDate: new Date().toISOString(),
-    LastModifiedDate: new Date().toISOString(),
-  },
-  // ... Add more mock properties here
-];
+export const fetchPaginatedProperties = async (paginationRequest: PaginationRequest): Promise<PaginatedResponse<PropertyInfo>> => {
+  // Simulating API call
+  await new Promise(resolve => setTimeout(resolve, 1000));
 
-// Mock data for user
-const mockUser: User = {
-  Avatar: "https://example.com/avatar.jpg",
-  Email: "johndoe@example.com",
-  Username: "johndoe",
-  FirstName: "John",
-  LastName: "Doe",
-  Phone: "+1234567890",
-  Dob: "1990-01-01",
-  Gender: "Male",
-  Address: "123 Main St, City, Country",
-  Language: "English",
-};
+  const mockProperties: PropertyInfo[] = [
+    {
+      id: '1',
+      name: 'Cozy Apartment',
+      description: 'A beautiful cozy apartment in the heart of the city',
+      mediaUrls: ['https://example.com/image1.jpg', 'https://example.com/image2.jpg'],
+      address: '123 Main St, Cityville',
+      price: '$1000/month',
+      upvoteCount: 10,
+      interestCount: '5',
+      isPublished: true,
+      publishDateTime: '2023-03-15T10:00:00Z',
+      createdDate: '2023-03-10T09:00:00Z',
+      lastModifiedDate: '2023-03-14T14:30:00Z',
+    },
+    {
+      id: '2',
+      name: 'Spacious Loft',
+      description: 'A modern loft with plenty of natural light',
+      mediaUrls: ['https://example.com/image3.jpg', 'https://example.com/image4.jpg'],
+      address: '456 Elm St, Townsville',
+      price: '$1500/month',
+      upvoteCount: 15,
+      interestCount: '8',
+      isPublished: true,
+      publishDateTime: '2023-03-16T11:00:00Z',
+      createdDate: '2023-03-12T10:00:00Z',
+      lastModifiedDate: '2023-03-15T15:30:00Z',
+    },
+  ];
 
-export const fetchProperties = async (): Promise<PropertyInfo[]> => {
-  try {
-    const response = await axios.get(`${config.apiHost}${config.apiPaths.properties}`, {
-      withCredentials: true,
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching properties:", error);
-    return mockProperties;
-  }
+  const startIndex = (paginationRequest.pageIndex - 1) * paginationRequest.pageSize;
+  const endIndex = startIndex + paginationRequest.pageSize;
+  const paginatedItems = mockProperties.slice(startIndex, endIndex);
+
+  return {
+    items: paginatedItems,
+    totalCount: mockProperties.length,
+    pageIndex: paginationRequest.pageIndex,
+    pageSize: paginationRequest.pageSize,
+    totalPages: Math.ceil(mockProperties.length / paginationRequest.pageSize),
+  };
 };
 
 export const fetchUser = async (): Promise<User> => {
-  try {
-    const response = await axios.get(`${config.apiHost}${config.apiPaths.user}`, {
-      withCredentials: true,
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching user data:", error);
-    return mockUser;
-  }
+  // Simulating API call
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  const mockUser: User = {
+    avatar: null,
+    email: "rentee-john-doe@yopmail.com",
+    username: "doeyjohn420",
+    firstName: "John",
+    lastName: "Doe",
+    phone: null,
+    dob: "2024-01-02",
+    gender: "male",
+    address: null,
+    language: null
+  };
+
+  return mockUser;
 };
 
-export const fetchPaginatedProperties = async (
-  paginationRequest: PaginationRequest
-): Promise<PaginationBaseResponse<PropertyInfo>> => {
-  try {
-    const response = await axios.post(`${config.apiHost}/api/properties`, paginationRequest, {
-      withCredentials: true,
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching paginated properties:", error);
-    throw error;
-  }
+export const likeProperty = async (propertyId: string): Promise<void> => {
+  // Simulating API call
+  await new Promise(resolve => setTimeout(resolve, 500));
+  console.log(`Liked property with ID: ${propertyId}`);
 };
 
-// Add a new utility function for making authenticated requests
-export const authenticatedFetch = async (url: string, options: any = {}) => {
-  try {
-    const response = await axios({
-      url,
-      ...options,
-      withCredentials: true,
-    });
-    return response.data;
-  } catch (error) {
-    console.error(`HTTP error! status: ${(error as any).response?.status}`);
-    throw error;
-  }
+export const bookmarkProperty = async (propertyId: string): Promise<void> => {
+  // Simulating API call
+  await new Promise(resolve => setTimeout(resolve, 500));
+  console.log(`Bookmarked property with ID: ${propertyId}`);
+};
+
+export const updateUserProfile = async (updatedUser: Partial<User>): Promise<User> => {
+  // Simulating API call
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  console.log('Updated user profile:', updatedUser);
+  
+  // In a real scenario, you would merge the updatedUser with the existing user data
+  // For this mock, we'll just return the updated fields along with some default values
+  return {
+    ...mockUser,
+    ...updatedUser,
+  };
 };

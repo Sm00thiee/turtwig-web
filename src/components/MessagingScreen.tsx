@@ -21,8 +21,8 @@ const MessagingScreen: React.FC<MessagingScreenProps> = ({ property, onClose }) 
     <div className="bg-white rounded-lg shadow-lg flex flex-col h-full">
       <div className="flex justify-between items-center p-4 border-b">
         <div>
-          <h2 className="text-2xl font-bold">{property.Price}</h2>
-          <p className="text-sm text-gray-600">{property.Address}</p>
+          <h2 className="text-2xl font-bold">{property.price}</h2>
+          <p className="text-sm text-gray-600">{property.address}</p>
         </div>
         <Button variant="ghost" onClick={onClose}>
           <X className="w-6 h-6" />
@@ -55,13 +55,13 @@ const MessagingScreen: React.FC<MessagingScreenProps> = ({ property, onClose }) 
         <div className="w-full md:w-1/2 border-t md:border-t-0 md:border-l overflow-y-auto">
           <div className="p-4">
             <div className="flex flex-wrap gap-2 mb-4">
-              {property.MediaUrls.map((image, index) => (
+              {property.mediaUrls.map((image, index) => (
                 <img key={index} src={image} alt={`Property ${index + 1}`} className="w-24 h-24 object-cover rounded" />
               ))}
             </div>
             <div className="bg-gray-100 rounded-lg p-4 mb-4">
               <h3 className="font-semibold mb-2">Description</h3>
-              <p className="text-sm">{property.Description}</p>
+              <p className="text-sm">{property.description}</p>
             </div>
           </div>
         </div>
