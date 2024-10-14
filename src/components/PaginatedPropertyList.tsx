@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchPaginatedProperties } from '../utils/api';
 import { PropertyInfo } from '../types/property';
@@ -7,11 +7,13 @@ import PropertyDetails from './PropertyDetails';
 import PropertyActions from './PropertyActions';
 import PropertyList from './PropertyList';
 import MessagingScreen from './MessagingScreen';
+import { Button } from '@/components/ui/button';
+import { Filter, List, Grid } from 'lucide-react';
 
 const PaginatedPropertyList: React.FC = () => {
   const [paginationRequest, setPaginationRequest] = useState<PaginationRequest>({
     pageIndex: 1,
-    pageSize: 1,
+    pageSize: 10,
     sortBy: '',
     isDescending: true,
   });
@@ -20,31 +22,12 @@ const PaginatedPropertyList: React.FC = () => {
   const [likedProperties, setLikedProperties] = useState<PropertyInfo[]>([]);
   const [bookmarkedProperties, setBookmarkedProperties] = useState<PropertyInfo[]>([]);
   const [selectedProperty, setSelectedProperty] = useState<PropertyInfo | null>(null);
+  const [viewMode, setViewMode] = useState<'explorer' | 'listing'>('explorer');
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['paginatedProperties', paginationRequest],
     queryFn: () => fetchPaginatedProperties(paginationRequest),
   });
-
-  useEffect(() => {
-    const storedLikedProperties = localStorage.getItem('likedProperties');
-    const storedBookmarkedProperties = localStorage.getItem('bookmarkedProperties');
-    
-    if (storedLikedProperties) {
-      setLikedProperties(JSON.parse(storedLikedProperties));
-    }
-    if (storedBookmarkedProperties) {
-      setBookmarkedProperties(JSON.parse(storedBookmarkedProperties));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('likedProperties', JSON.stringify(likedProperties));
-  }, [likedProperties]);
-
-  useEffect(() => {
-    localStorage.setItem('bookmarkedProperties', JSON.stringify(bookmarkedProperties));
-  }, [bookmarkedProperties]);
 
   const handleNextProperty = () => {
     if (data && currentPropertyIndex < data.items.length - 1) {
@@ -86,29 +69,58 @@ const PaginatedPropertyList: React.FC = () => {
   const currentProperty = data?.items[currentPropertyIndex];
 
   return (
-    <div className="flex">
-      <div className="w-1/3 pr-4">
-        <PropertyList
-          likedProperties={likedProperties}
-          bookmarkedProperties={bookmarkedProperties}
-          onPropertyClick={handlePropertyClick}
-        />
+    <div className="flex flex-col h-screen">
+      <div className="flex justify-between items-center p-4 bg-gray-100">
+        <div className="flex space-x-2">
+          <Button
+            variant={viewMode === 'explorer' ? 'default' : 'outline'}
+            onClick={() => setViewMode('explorer')}
+          >
+            Units Explorer
+          </Button>
+          <Button
+            variant={viewMode === 'listing' ? 'default' : 'outline'}
+            onClick={() => setViewMode('listing')}
+          >
+            Units Listing
+          </Button>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Button variant="outline">
+            <Filter className="w-4 h-4 mr-2" />
+            Filter
+          </Button>
+          <Button variant="outline">
+            <List className="w-4 h-4 mr-2" />
+          </Button>
+          <Button variant="outline">
+            <Grid className="w-4 h-4 mr-2" />
+          </Button>
+        </div>
       </div>
-      <div className="w-2/3">
-        {selectedProperty ? (
-          <MessagingScreen property={selectedProperty} onClose={handleCloseChat} />
-        ) : currentProperty ? (
-          <>
-            <PropertyDetails property={currentProperty} isAnimating={false} />
-            <PropertyActions
-              currentProperty={currentProperty}
-              onDislike={handleNextProperty}
-              onBookmark={handleBookmark}
-              onLike={handleLike}
-              isBookmarked={bookmarkedProperties.some(p => p.id === currentProperty.id)}
-            />
-          </>
-        ) : null}
+      <div className="flex flex-1 overflow-hidden">
+        <div className="w-1/3 overflow-y-auto border-r">
+          <PropertyList
+            properties={data?.items || []}
+            onPropertyClick={handlePropertyClick}
+          />
+        </div>
+        <div className="w-2/3 overflow-y-auto">
+          {selectedProperty ? (
+            <MessagingScreen property={selectedProperty} onClose={handleCloseChat} />
+          ) : currentProperty ? (
+            <>
+              <PropertyDetails property={currentProperty} isAnimating={false} />
+              <PropertyActions
+                currentProperty={currentProperty}
+                onDislike={handleNextProperty}
+                onBookmark={handleBookmark}
+                onLike={handleLike}
+                isBookmarked={bookmarkedProperties.some(p => p.id === currentProperty.id)}
+              />
+            </>
+          ) : null}
+        </div>
       </div>
     </div>
   );

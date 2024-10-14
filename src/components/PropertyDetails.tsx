@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
-import { Clock, MapPin, ChevronLeft, ChevronRight, Home } from 'lucide-react';
+import React from 'react';
+import { Clock, MapPin, Home, Users, Bath } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import FullSizeImageModal from './FullSizeImageModal';
-import GoogleMap from './GoogleMap';
 import { PropertyInfo } from '../types/property';
 
 interface PropertyDetailsProps {
@@ -14,97 +12,48 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({
   property,
   isAnimating
 }) => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [showDetails, setShowDetails] = useState(false);
-  const [showFullSizeImage, setShowFullSizeImage] = useState(false);
-
-  const allImages = [...(property.mediaUrls || []), 'map'];
-  const totalImages = allImages.length;
-
-  const nextImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % totalImages);
-  };
-
-  const prevImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + totalImages) % totalImages);
-  };
-
-  const handleImageClick = () => {
-    if (currentImageIndex < (property.mediaUrls?.length || 0)) {
-      setShowFullSizeImage(true);
-    }
-  };
-
   return (
     <div className={`bg-white rounded-lg shadow-lg overflow-hidden transition-opacity duration-300 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
-      <div className="relative h-64 md:h-96">
-        {currentImageIndex < (property.mediaUrls?.length || 0) ? (
-          <img 
-            src={allImages[currentImageIndex]} 
-            alt="Property" 
-            className="w-full h-full object-cover cursor-pointer" 
-            onClick={handleImageClick}
-          />
-        ) : (
-          <GoogleMap address={property.address || ''} />
-        )}
-        {totalImages > 1 && (
-          <>
-            <Button variant="outline" className="absolute top-1/2 left-2 transform -translate-y-1/2" onClick={prevImage}>
-              <ChevronLeft className="w-4 h-4" />
-            </Button>
-            <Button variant="outline" className="absolute top-1/2 right-2 transform -translate-y-1/2" onClick={nextImage}>
-              <ChevronRight className="w-4 h-4" />
-            </Button>
-          </>
-        )}
-        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2">
-          {allImages.map((_, index) => (
-            <span
-              key={index}
-              className={`inline-block w-2 h-2 rounded-full mx-1 ${
-                index === currentImageIndex ? 'bg-white' : 'bg-gray-300'
-              }`}
-            />
-          ))}
+      <div className="relative h-96">
+        <img 
+          src={property.mediaUrls[0]} 
+          alt="Property" 
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute bottom-4 left-4 bg-white px-4 py-2 rounded-full text-2xl font-bold">
+          {property.price}
         </div>
       </div>
       <div className="p-6">
-        <h2 className="text-2xl font-bold mb-2">{property.price}</h2>
-        <div className="flex items-center text-gray-600 mb-2">
-          <MapPin className="w-4 h-4 mr-2" />
-          <span>{property.address}</span>
-        </div>
-        <div className="flex items-center text-gray-600 mb-4">
-          <Clock className="w-4 h-4 mr-2" />
-          <span>{new Date(property.publishDateTime).toLocaleString()}</span>
+        <div className="flex justify-between items-center mb-4">
+          <div className="flex items-center text-gray-600">
+            <MapPin className="w-4 h-4 mr-2" />
+            <span>{property.address}</span>
+          </div>
+          <div className="flex items-center text-gray-600">
+            <Clock className="w-4 h-4 mr-2" />
+            <span>{new Date(property.publishDateTime).toLocaleString()}</span>
+          </div>
         </div>
         <div className="flex justify-between items-center text-sm text-gray-600 mb-4">
           <div className="flex items-center">
             <Home className="w-4 h-4 mr-1" />
-            <span>{property.name}</span>
+            <span>{property.size}</span>
+          </div>
+          <div className="flex items-center">
+            <Users className="w-4 h-4 mr-1" />
+            <span>{property.bedrooms} bedrooms</span>
+          </div>
+          <div className="flex items-center">
+            <Bath className="w-4 h-4 mr-1" />
+            <span>{property.bathrooms} bathrooms</span>
           </div>
         </div>
-        <Button 
-          variant="outline" 
-          className="w-full text-gray-600 hover:bg-gray-100"
-          onClick={() => setShowDetails(!showDetails)}
-        >
-          {showDetails ? 'Hide details' : 'See details'}
+        <p className="text-gray-700 mb-4">{property.description}</p>
+        <Button variant="outline" className="w-full">
+          See details
         </Button>
-        {showDetails && (
-          <div className="mt-4 text-sm text-gray-600">
-            <h3 className="font-semibold text-lg mb-2">Description</h3>
-            <p>{property.description}</p>
-          </div>
-        )}
       </div>
-      {showFullSizeImage && property.mediaUrls && (
-        <FullSizeImageModal
-          imageUrl={property.mediaUrls[currentImageIndex]}
-          onClose={() => setShowFullSizeImage(false)}
-        />
-      )}
     </div>
   );
 };
