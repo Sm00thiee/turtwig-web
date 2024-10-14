@@ -1,48 +1,39 @@
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import PropertyListing from './PropertyListing';
-import { Property } from '../types/property';
+import { PropertyInfo } from '../types/property';
 
 interface PropertyListProps {
-  likedProperties: Property[];
-  bookmarkedProperties: Property[];
-  selectedProperty: Property | null;
-  onPropertyClick: (property: Property) => void;
+  likedProperties: PropertyInfo[];
+  bookmarkedProperties: PropertyInfo[];
 }
 
 const PropertyList: React.FC<PropertyListProps> = ({
   likedProperties,
-  bookmarkedProperties,
-  selectedProperty,
-  onPropertyClick
+  bookmarkedProperties
 }) => {
   return (
-    <Tabs defaultValue="liked" className="mt-8">
+    <Tabs defaultValue="liked" className="w-full">
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="liked">Liked Units</TabsTrigger>
         <TabsTrigger value="bookmarked">Bookmarked</TabsTrigger>
       </TabsList>
       <TabsContent value="liked">
-        <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
+        <div className="space-y-2">
           {likedProperties.map((property) => (
-            <PropertyListing
-              key={property.Id}
-              property={property}
-              isSelected={selectedProperty?.Id === property.Id}
-              onClick={() => onPropertyClick(property)}
-            />
+            <div key={property.id} className="p-2 border rounded">
+              <h3 className="font-bold">{property.price}</h3>
+              <p className="text-sm">{property.address}</p>
+            </div>
           ))}
         </div>
       </TabsContent>
       <TabsContent value="bookmarked">
-        <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
+        <div className="space-y-2">
           {bookmarkedProperties.map((property) => (
-            <PropertyListing
-              key={property.Id}
-              property={property}
-              isSelected={selectedProperty?.Id === property.Id}
-              onClick={() => onPropertyClick(property)}
-            />
+            <div key={property.id} className="p-2 border rounded">
+              <h3 className="font-bold">{property.price}</h3>
+              <p className="text-sm">{property.address}</p>
+            </div>
           ))}
         </div>
       </TabsContent>
