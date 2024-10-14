@@ -1,8 +1,8 @@
-import { PaginationRequest, PaginatedResponse } from '../types/pagination';
+import { PaginationRequest, PaginationBaseResponse } from '../types/pagination';
 import { PropertyInfo } from '../types/property';
 import { User } from '../types/user';
 
-export const fetchPaginatedProperties = async (paginationRequest: PaginationRequest): Promise<PaginatedResponse<PropertyInfo>> => {
+export const fetchPaginatedProperties = async (paginationRequest: PaginationRequest): Promise<PaginationBaseResponse<PropertyInfo>> => {
   // Simulating API call
   await new Promise(resolve => setTimeout(resolve, 1000));
 
@@ -93,4 +93,20 @@ export const updateUserProfile = async (updatedUser: Partial<User>): Promise<Use
     ...mockUser,
     ...updatedUser,
   };
+};
+
+export const authenticatedFetch = async (url: string, options: RequestInit = {}): Promise<any> => {
+  try {
+    const response = await fetch(url, {
+      ...options,
+      credentials: 'include',
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error in authenticatedFetch:', error);
+    throw error;
+  }
 };
