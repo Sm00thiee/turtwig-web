@@ -1,3 +1,3 @@
 export const isAuthenticated = () => {
-  return document.cookie.includes('jwt='); // Check if the JWT cookie exists
+  return document.cookie.includes('jwt_access='); // Check if the JWT cookie exists
 };
