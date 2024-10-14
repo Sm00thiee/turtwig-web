@@ -1,12 +1,12 @@
 export interface User {
-  Avatar?: string;
-  Email?: string;
-  Username: string;
-  FirstName?: string;
-  LastName?: string;
-  Phone?: string;
-  Dob?: string;
-  Gender?: string;
-  Address?: string;
-  Language?: string;
+  avatar: string | null;
+  email: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  phone: string | null;
+  dob: string;
+  gender: string;
+  address: string | null;
+  language: string | null;
 }
