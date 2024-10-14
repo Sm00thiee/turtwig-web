@@ -12,3 +12,5 @@ export interface PropertyInfo {
   CreatedDate: string;
   LastModifiedDate: string;
 }
+
+export type Property = PropertyInfo;

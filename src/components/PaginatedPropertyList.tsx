@@ -6,7 +6,7 @@ import { PaginationRequest } from '../types/pagination';
 import PropertyListing from './PropertyListing';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const PaginatedPropertyList: React.FC = () => {
   const [paginationRequest, setPaginationRequest] = useState<PaginationRequest>({
@@ -25,8 +25,8 @@ const PaginatedPropertyList: React.FC = () => {
     setPaginationRequest(prev => ({ ...prev, pageIndex: newPageIndex }));
   };
 
-  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setPaginationRequest(prev => ({ ...prev, sortBy: event.target.value }));
+  const handleSortChange = (value: string) => {
+    setPaginationRequest(prev => ({ ...prev, sortBy: value }));
   };
 
   const handleOrderChange = () => {
@@ -39,10 +39,15 @@ const PaginatedPropertyList: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="flex items-center space-x-2">
-        <Select value={paginationRequest.sortBy} onChange={handleSortChange}>
-          <option value="">Sort by</option>
-          <option value="Price">Price</option>
-          <option value="PublishDateTime">Publish Date</option>
+        <Select value={paginationRequest.sortBy} onValueChange={handleSortChange}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Sort by" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">Sort by</SelectItem>
+            <SelectItem value="Price">Price</SelectItem>
+            <SelectItem value="PublishDateTime">Publish Date</SelectItem>
+          </SelectContent>
         </Select>
         <Button onClick={handleOrderChange}>
           {paginationRequest.isDescending ? 'Descending' : 'Ascending'}
