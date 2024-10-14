@@ -11,6 +11,9 @@ export interface PropertyInfo {
   publishDateTime: string;
   createdDate: string;
   lastModifiedDate: string;
+  size?: string;
+  bedrooms?: number;
+  bathrooms?: number;
 }
 
 export type Property = PropertyInfo;

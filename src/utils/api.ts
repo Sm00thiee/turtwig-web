@@ -10,16 +10,24 @@ export const fetchPaginatedProperties = async (paginationRequest: PaginationRequ
     {
       id: '1',
       name: 'Cozy Apartment',
-      description: 'A beautiful cozy apartment in the heart of the city',
-      mediaUrls: ['https://example.com/image1.jpg', 'https://example.com/image2.jpg'],
-      address: '123 Main St, Cityville',
-      price: '$1000/month',
+      description: 'Welcome to this stunning, modern apartment located in the bustling city center of Hanoi. This spacious 2-bedroom apartment offers a more comfortable and stylish living space ideal for individuals or small families seeking convenience and comfort.',
+      mediaUrls: [
+        'https://example.com/image1.jpg',
+        'https://example.com/image2.jpg',
+        'https://example.com/image3.jpg',
+        'https://example.com/image4.jpg'
+      ],
+      address: '58 Quoc Tu Giam, Van Mieu, Dong Da, Ha Noi',
+      price: '5,000,000 đ/month',
       upvoteCount: 10,
       interestCount: '5',
       isPublished: true,
       publishDateTime: '2023-03-15T10:00:00Z',
       createdDate: '2023-03-10T09:00:00Z',
       lastModifiedDate: '2023-03-14T14:30:00Z',
+      size: '60m2',
+      bedrooms: 2,
+      bathrooms: 1,
     },
     {
       id: '2',
@@ -34,6 +42,9 @@ export const fetchPaginatedProperties = async (paginationRequest: PaginationRequ
       publishDateTime: '2023-03-16T11:00:00Z',
       createdDate: '2023-03-12T10:00:00Z',
       lastModifiedDate: '2023-03-15T15:30:00Z',
+      size: '80m2',
+      bedrooms: 3,
+      bathrooms: 2,
     },
   ];
 
